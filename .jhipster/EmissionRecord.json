@@ -1,0 +1,41 @@
+{
+  "applications": ["EcoTrackPro"],
+  "changelogDate": "20260105193436",
+  "dto": "mapstruct",
+  "entityTableName": "emission_record",
+  "fields": [
+    {
+      "fieldName": "scope",
+      "fieldType": "Scope",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SCOPE_1,SCOPE_2,SCOPE_3"
+    },
+    {
+      "fieldName": "carbonGrams",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateRecorded",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "source",
+      "fieldType": "String"
+    }
+  ],
+  "name": "EmissionRecord",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "product",
+      "otherEntityRelationshipName": "emissionRecord",
+      "relationshipName": "product",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

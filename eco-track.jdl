@@ -1,0 +1,46 @@
+application {
+  config {
+    baseName EcoTrackPro,
+    applicationType monolith,
+    packageName com.ecotrack.app,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+    clientFramework angular,
+    buildTool maven
+  }
+  entities *
+}
+
+entity Product {
+  name String required,
+  sku String required unique,
+  description String,
+  createdDate Instant
+}
+
+entity Supplier {
+  companyName String required,
+  contactEmail String required,
+  industry String,
+  tier Integer
+}
+
+entity EmissionRecord {
+  scope Scope required,
+  carbonGrams Long required, // Storing in grams for precision
+  dateRecorded LocalDate,
+  source String // e.g., "Electricity Bill", "Logistics"
+}
+
+enum Scope {
+  SCOPE_1, SCOPE_2, SCOPE_3
+}
+
+relationship OneToMany {
+  Supplier{product} to Product{supplier(companyName)},
+  Product{emissionRecord} to EmissionRecord{product(name)}
+}
+
+dto * with mapstruct
+service * with serviceImpl
+paginate * with pagination
