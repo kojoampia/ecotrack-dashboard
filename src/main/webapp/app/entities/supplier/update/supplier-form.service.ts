@@ -22,6 +22,9 @@ type SupplierFormGroupContent = {
   contactEmail: FormControl<ISupplier['contactEmail']>;
   industry: FormControl<ISupplier['industry']>;
   tier: FormControl<ISupplier['tier']>;
+  address: FormControl<ISupplier['address']>;
+  phone: FormControl<ISupplier['phone']>;
+  website: FormControl<ISupplier['website']>;
 };
 
 export type SupplierFormGroup = FormGroup<SupplierFormGroupContent>;
@@ -49,6 +52,9 @@ export class SupplierFormService {
       }),
       industry: new FormControl(supplierRawValue.industry),
       tier: new FormControl(supplierRawValue.tier),
+      address: new FormControl(supplierRawValue.address),
+      phone: new FormControl(supplierRawValue.phone),
+      website: new FormControl(supplierRawValue.website),
     });
   }
 

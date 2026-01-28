@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import SharedModule from 'app/shared/shared.module';
 import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
@@ -9,7 +11,7 @@ import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
   selector: 'jhi-thread-modal',
   templateUrl: './metrics-modal-threads.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+  imports: [SharedModule, MatChipsModule, MatCardModule],
 })
 export class MetricsModalThreadsComponent implements OnInit {
   ThreadState = ThreadState;
@@ -21,7 +23,12 @@ export class MetricsModalThreadsComponent implements OnInit {
   threadDumpTimedWaiting = 0;
   threadDumpWaiting = 0;
 
-  constructor(private activeModal: NgbActiveModal) {}
+  constructor(
+    public dialogRef: MatDialogRef<MetricsModalThreadsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { threads: Thread[] },
+  ) {
+    this.threads = data.threads;
+  }
 
   ngOnInit(): void {
     this.threads?.forEach(thread => {
@@ -57,6 +64,6 @@ export class MetricsModalThreadsComponent implements OnInit {
   }
 
   dismiss(): void {
-    this.activeModal.dismiss();
+    this.dialogRef.close();
   }
 }

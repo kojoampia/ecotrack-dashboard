@@ -21,8 +21,13 @@
       "name": "Name",
       "sku": "Sku",
       "description": "Description",
+      "category": "Category",
+      "unitOfMeasure": "Unit Of Measure",
+      "totalCarbonFootprint": "Total Carbon Footprint",
       "createdDate": "Created Date",
+      "lastModifiedDate": "Last Modified Date",
       "emissionRecord": "Emission Record",
+      "passport": "Passport",
       "supplier": "Supplier"
     }
   }

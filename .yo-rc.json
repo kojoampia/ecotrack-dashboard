@@ -6,15 +6,19 @@
     "baseName": "EcoTrackPro",
     "buildTool": "maven",
     "clientFramework": "angular",
+    "creationTimestamp": 1767653213363,
     "devServerPort": 4200,
-    "entities": ["Product", "Supplier", "EmissionRecord"],
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": true,
+    "entities": ["Product", "Supplier", "EmissionRecord", "ProductPassport"],
     "jhipsterVersion": "8.0.0",
     "jwtSecretKey": "ZDFiOTIyOTM0NGM4NjBjZTRjMTU3NTk1YTBlMTZjMjFjZDJjMGRkNmQ5NzNiMjY0MzIxMTdjMTZkMDM0ZjJiMjk5YTI4Yzk5Y2VkMmI1MTEwOWJjZWQ3MmVkOTRmMWZiNzExMDkzMTY1N2JiY2FjMTFiOGZjMjA3NGJiYzZlYjQ=",
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1767641676000,
+    "lastLiquibaseTimestamp": 1767654298000,
     "nativeLanguage": "en",
     "packageFolder": "com/ecotrack/app",
     "packageName": "com.ecotrack.app",
-    "prodDatabaseType": "postgresql"
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "no"
   }
 }

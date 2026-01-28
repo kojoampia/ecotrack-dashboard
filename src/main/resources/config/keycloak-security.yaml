@@ -1,0 +1,72 @@
+spring:
+  application:
+    name: ecotrack-backend
+
+  # --- Security Configuration (Resource Server) ---
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # The issuer-uri allows Spring to automatically discover public keys (JWKS)
+          issuer-uri: https://keycloak.ecotrack.pro/realms/ecotrack
+          # Validates that the token was intended for this specific service
+          audiences: ecotrack-api
+
+  # --- Persistence & Multi-Tenancy ---
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecotrack
+    username: ${DB_USER:ecotrack}
+    password: ${DB_PASS:ecotrack_pass}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        # Required for the TenantInterceptor to work with RLS
+        session_factory:
+          statement_inspector: com.ecotrackpro.security.TenantStatementInspector
+
+# --- Custom Keycloak Admin Client Configuration ---
+# These values are injected into KeycloakService.java
+keycloak:
+  auth-server-url: https://keycloak.ecotrack.pro
+  realm: ecotrack
+  resource: admin-cli # Or your dedicated backend service client
+  credentials:
+    secret: ${KEYCLOAK_ADMIN_SECRET:SECRET_FROM_VAULT}
+
+# --- Business & Compliance Settings ---
+app:
+  compliance:
+    max-daily-budget: 50.0 # Default daily AI spend limit in USD
+    default-region: EU
+    confidence-threshold: 0.92
+
+# --- Observability & Monitoring ---
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, otlp
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  otlp:
+    metrics:
+      export:
+        url: http://otel-collector:4317
+    tracing:
+      endpoint: http://otel-collector:4317
+
+logging:
+  level:
+    root: INFO
+    com.ecotrackpro: DEBUG
+    org.springframework.security: INFO
+  pattern:
+    # Includes Trace and Span IDs in logs for Loki/Tempo correlation
+    level: "%5p [${spring.application.name},%X{trace_id:-},%X{span_id:-}]"

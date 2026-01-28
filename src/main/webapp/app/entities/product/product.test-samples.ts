@@ -3,29 +3,33 @@ import dayjs from 'dayjs/esm';
 import { IProduct, NewProduct } from './product.model';
 
 export const sampleWithRequiredData: IProduct = {
-  id: 28710,
-  name: 'madly toward',
-  sku: 'fatally apud outfielder',
+  id: 14485,
+  name: 'retention tense upgrade',
+  sku: 'nosedive famously darling',
 };
 
 export const sampleWithPartialData: IProduct = {
-  id: 7810,
-  name: 'darling',
-  sku: 'serene unnecessarily',
-  createdDate: dayjs('2026-01-05T06:03'),
+  id: 16865,
+  name: 'unnecessarily forenenst before',
+  sku: 'powerful toward nag',
+  createdDate: dayjs('2026-01-05T02:32'),
 };
 
 export const sampleWithFullData: IProduct = {
-  id: 19900,
-  name: 'patronize persimmon amid',
-  sku: 'fairly evenly',
-  description: 'lean',
-  createdDate: dayjs('2026-01-05T18:53'),
+  id: 11079,
+  name: 'parliament',
+  sku: 'so gladly',
+  description: 'sympathetically',
+  category: 'sweatshirt for',
+  unitOfMeasure: 'lyre',
+  totalCarbonFootprint: 12119.45,
+  createdDate: dayjs('2026-01-05T12:20'),
+  lastModifiedDate: dayjs('2026-01-05T18:21'),
 };
 
 export const sampleWithNewData: NewProduct = {
-  name: 'chief',
-  sku: 'duh',
+  name: 'nor after',
+  sku: 'ack',
   id: null,
 };
 

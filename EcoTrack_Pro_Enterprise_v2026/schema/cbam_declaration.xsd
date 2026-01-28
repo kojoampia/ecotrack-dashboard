@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://ec.europa.eu/taxation_customs/cbam/v1"
+           xmlns:cbam="https://ec.europa.eu/taxation_customs/cbam/v1"
+           elementFormDefault="qualified">
+
+    <!-- Root Element -->
+    <xs:element name="CBAMDeclaration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Header" type="cbam:HeaderType"/>
+                <xs:element name="Declarant" type="cbam:PartyType"/>
+                <xs:element name="Goods" type="cbam:GoodsType" maxOccurs="unbounded"/>
+                <xs:element name="TotalEmissions" type="xs:decimal"/>
+                <xs:element name="CertificationHash" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="HeaderType">
+        <xs:sequence>
+            <xs:element name="DeclarationID" type="xs:string"/>
+            <xs:element name="ReportingPeriod" type="xs:string"/> <!-- e.g., 2026-Q1 -->
+            <xs:element name="Timestamp" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PartyType">
+        <xs:sequence>
+            <xs:element name="EORINumber" type="xs:string"/>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="Address" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="GoodsType">
+        <xs:sequence>
+            <xs:element name="CNCode" type="xs:string"/> <!-- Commodity Code -->
+            <xs:element name="CountryOfOrigin" type="xs:string"/>
+            <xs:element name="InstallationID" type="xs:string"/>
+            <xs:element name="NetMass" type="xs:decimal"/>
+            <xs:element name="EmbeddedEmissions">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="DirectEmissions" type="xs:decimal"/>
+                        <xs:element name="IndirectEmissions" type="xs:decimal"/>
+                        <xs:element name="SpecificEmbeddedEmissions" type="xs:decimal"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

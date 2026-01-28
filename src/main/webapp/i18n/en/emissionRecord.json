@@ -22,6 +22,8 @@
       "carbonGrams": "Carbon Grams",
       "dateRecorded": "Date Recorded",
       "source": "Source",
+      "notes": "Notes",
+      "verified": "Verified",
       "product": "Product"
     }
   }

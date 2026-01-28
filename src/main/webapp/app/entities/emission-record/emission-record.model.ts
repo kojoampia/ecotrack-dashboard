@@ -8,6 +8,8 @@ export interface IEmissionRecord {
   carbonGrams?: number | null;
   dateRecorded?: dayjs.Dayjs | null;
   source?: string | null;
+  notes?: string | null;
+  verified?: boolean | null;
   product?: Pick<IProduct, 'id' | 'name'> | null;
 }
 

@@ -1,0 +1,65 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="kojo (generated)" id="1767655401821-2">
+        <createTable tableName="product_passport">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="product_passportPK"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+            <column name="passport_data" type="OID"/>
+            <column name="version" type="INTEGER"/>
+            <column name="product_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-3">
+        <addColumn tableName="supplier">
+            <column name="address" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-4">
+        <addColumn tableName="product">
+            <column name="category" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-5">
+        <addColumn tableName="product">
+            <column name="last_modified_date" type="timestamp(6)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-6">
+        <addColumn tableName="emission_record">
+            <column name="notes" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-7">
+        <addColumn tableName="supplier">
+            <column name="phone" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-8">
+        <addColumn tableName="product">
+            <column name="total_carbon_footprint" type="numeric(21, 2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-9">
+        <addColumn tableName="product">
+            <column name="unit_of_measure" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-10">
+        <addColumn tableName="emission_record">
+            <column name="verified" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-11">
+        <addColumn tableName="supplier">
+            <column name="website" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-12">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="product_passport" constraintName="FKfhhb2xxpssasj64ehmhl1blwg" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product" validate="true"/>
+    </changeSet>
+    <changeSet author="kojo (generated)" id="1767655401821-1">
+        <modifyDataType columnName="email" newDataType="varchar(254)" tableName="jhi_user"/>
+    </changeSet>
+</databaseChangeLog>

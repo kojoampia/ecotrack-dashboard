@@ -1,0 +1,27 @@
+{
+  "ecoTrackProApp": {
+    "productPassport": {
+      "home": {
+        "title": "ProductPassports",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Product Passport",
+        "createOrEditLabel": "Créer ou éditer un Product Passport",
+        "notFound": "Aucun Product Passport trouvé"
+      },
+      "created": "Un nouveau Product Passport a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Product Passport avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Product Passport avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Product Passport {{ id }} ?"
+      },
+      "detail": {
+        "title": "Product Passport"
+      },
+      "id": "ID",
+      "passportData": "Passport Data",
+      "version": "Version",
+      "createdDate": "Created Date",
+      "product": "Product"
+    }
+  }
+}

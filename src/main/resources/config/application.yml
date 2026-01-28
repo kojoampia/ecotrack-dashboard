@@ -209,4 +209,14 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
+ecotrack:
+  webhook:
+    secret: ${WEBHOOK_SECRET:mySecretWebhookKey}
+
 # application:
+keycloak:
+  auth-server-url: http://localhost:9080
+  realm: jhipster
+  resource: admin-cli
+  credentials:
+    secret: admin

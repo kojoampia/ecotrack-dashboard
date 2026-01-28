@@ -10,7 +10,8 @@
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "product": "Product",
         "supplier": "Supplier",
-        "emissionRecord": "Emission Record"
+        "emissionRecord": "Emission Record",
+        "productPassport": "Product Passport"
       },
       "account": {
         "main": "Compte",

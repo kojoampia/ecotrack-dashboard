@@ -1,0 +1,4 @@
+id,sensor_uid,type,location,status,last_ping,tenant_id
+1,IOT-MT-STEEL-01,ENERGY_METER,Main Smelter - Hall A,ACTIVE,2026-01-10T14:00:00Z,tenant_steel_001
+2,IOT-MT-STEEL-02,ENERGY_METER,Finishing Line - Hall B,ACTIVE,2026-01-10T14:05:00Z,tenant_steel_001
+3,IOT-TEMP-GP-01,THERMOSTAT,Cold Storage Cluster,ACTIVE,2026-01-10T14:10:00Z,tenant_green_002

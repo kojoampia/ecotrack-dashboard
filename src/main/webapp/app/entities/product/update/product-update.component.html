@@ -46,6 +46,37 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" jhiTranslate="ecoTrackProApp.product.category" for="field_category">Category</label>
+          <input type="text" class="form-control" name="category" id="field_category" data-cy="category" formControlName="category" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="ecoTrackProApp.product.unitOfMeasure" for="field_unitOfMeasure">Unit Of Measure</label>
+          <input
+            type="text"
+            class="form-control"
+            name="unitOfMeasure"
+            id="field_unitOfMeasure"
+            data-cy="unitOfMeasure"
+            formControlName="unitOfMeasure"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="ecoTrackProApp.product.totalCarbonFootprint" for="field_totalCarbonFootprint"
+            >Total Carbon Footprint</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="totalCarbonFootprint"
+            id="field_totalCarbonFootprint"
+            data-cy="totalCarbonFootprint"
+            formControlName="totalCarbonFootprint"
+          />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" jhiTranslate="ecoTrackProApp.product.createdDate" for="field_createdDate">Created Date</label>
           <div class="d-flex">
             <input
@@ -55,6 +86,23 @@
               class="form-control"
               name="createdDate"
               formControlName="createdDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="ecoTrackProApp.product.lastModifiedDate" for="field_lastModifiedDate"
+            >Last Modified Date</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_lastModifiedDate"
+              data-cy="lastModifiedDate"
+              type="datetime-local"
+              class="form-control"
+              name="lastModifiedDate"
+              formControlName="lastModifiedDate"
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>

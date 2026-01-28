@@ -1,5 +1,6 @@
 package com.ecotrack.app.service.impl;
 
+import com.ecotrack.app.config.TenantContext;
 import com.ecotrack.app.domain.Product;
 import com.ecotrack.app.repository.ProductRepository;
 import com.ecotrack.app.service.ProductService;
@@ -35,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO save(ProductDTO productDTO) {
         log.debug("Request to save Product : {}", productDTO);
         Product product = productMapper.toEntity(productDTO);
+        product.setTenantId(TenantContext.getCurrentTenant());
         product = productRepository.save(product);
         return productMapper.toDto(product);
     }
@@ -43,6 +45,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO update(ProductDTO productDTO) {
         log.debug("Request to update Product : {}", productDTO);
         Product product = productMapper.toEntity(productDTO);
+        product.setTenantId(TenantContext.getCurrentTenant());
         product = productRepository.save(product);
         return productMapper.toDto(product);
     }

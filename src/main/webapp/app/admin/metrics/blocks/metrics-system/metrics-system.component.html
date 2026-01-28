@@ -16,18 +16,16 @@
     <div class="col-md-3 text-end">{{ 100 * systemMetrics['process.cpu.usage'] | number: '1.0-2' }} %</div>
   </div>
 
-  <ngb-progressbar [value]="100 * systemMetrics['process.cpu.usage']" [striped]="true" [animated]="false" type="success">
-    <span>{{ 100 * systemMetrics['process.cpu.usage'] | number: '1.0-2' }} %</span>
-  </ngb-progressbar>
+  <mat-progress-bar [value]="100 * systemMetrics['process.cpu.usage']" color="primary"> </mat-progress-bar>
+  <span>{{ 100 * systemMetrics['process.cpu.usage'] | number: '1.0-2' }} %</span>
 
   <div class="row">
     <div class="col-md-9">System CPU usage</div>
     <div class="col-md-3 text-end">{{ 100 * systemMetrics['system.cpu.usage'] | number: '1.0-2' }} %</div>
   </div>
 
-  <ngb-progressbar [value]="100 * systemMetrics['system.cpu.usage']" [striped]="true" [animated]="false" type="success">
-    <span>{{ 100 * systemMetrics['system.cpu.usage'] | number: '1.0-2' }} %</span>
-  </ngb-progressbar>
+  <mat-progress-bar [value]="100 * systemMetrics['system.cpu.usage']" color="primary"> </mat-progress-bar>
+  <span>{{ 100 * systemMetrics['system.cpu.usage'] | number: '1.0-2' }} %</span>
 
   <div class="row">
     <div class="col-md-9">System CPU count</div>

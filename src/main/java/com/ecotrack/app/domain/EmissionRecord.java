@@ -2,8 +2,19 @@ package com.ecotrack.app.domain;
 
 import com.ecotrack.app.domain.enumeration.Scope;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import org.hibernate.annotations.Cache;
@@ -41,9 +52,35 @@ public class EmissionRecord implements Serializable {
     @Column(name = "source")
     private String source;
 
+    @Column(name = "notes")
+    private String notes;
+
+    @Column(name = "verified")
+    private Boolean verified;
+
+    @Column(name = "confidence_score")
+    private Integer confidenceScore;
+
+    @Column(name = "evidence_required")
+    private Boolean evidenceRequired;
+
+    @Column(name = "audit_required")
+    private Boolean auditRequired;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "emissionRecords", "supplier" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "emissionRecords", "passports", "supplier" }, allowSetters = true)
     private Product product;
+
+    @Column(name = "tenant_id", nullable = false)
+    private String tenantId;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "emissionRecord")
+    @JsonIgnoreProperties(value = { "emissionRecord" }, allowSetters = true)
+    private java.util.Set<EmissionEvidence> evidences = new java.util.LinkedHashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "relatedEmissionRecord")
+    @JsonIgnoreProperties(value = { "relatedEmissionRecord" }, allowSetters = true)
+    private java.util.Set<AuditTrail> auditEntries = new java.util.LinkedHashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -112,6 +149,71 @@ public class EmissionRecord implements Serializable {
         this.source = source;
     }
 
+    public String getNotes() {
+        return this.notes;
+    }
+
+    public EmissionRecord notes(String notes) {
+        this.setNotes(notes);
+        return this;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Boolean getVerified() {
+        return this.verified;
+    }
+
+    public EmissionRecord verified(Boolean verified) {
+        this.setVerified(verified);
+        return this;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    public Integer getConfidenceScore() {
+        return this.confidenceScore;
+    }
+
+    public EmissionRecord confidenceScore(Integer confidenceScore) {
+        this.setConfidenceScore(confidenceScore);
+        return this;
+    }
+
+    public void setConfidenceScore(Integer confidenceScore) {
+        this.confidenceScore = confidenceScore;
+    }
+
+    public Boolean getEvidenceRequired() {
+        return this.evidenceRequired;
+    }
+
+    public EmissionRecord evidenceRequired(Boolean evidenceRequired) {
+        this.setEvidenceRequired(evidenceRequired);
+        return this;
+    }
+
+    public void setEvidenceRequired(Boolean evidenceRequired) {
+        this.evidenceRequired = evidenceRequired;
+    }
+
+    public Boolean getAuditRequired() {
+        return this.auditRequired;
+    }
+
+    public EmissionRecord auditRequired(Boolean auditRequired) {
+        this.setAuditRequired(auditRequired);
+        return this;
+    }
+
+    public void setAuditRequired(Boolean auditRequired) {
+        this.auditRequired = auditRequired;
+    }
+
     public Product getProduct() {
         return this.product;
     }
@@ -122,6 +224,81 @@ public class EmissionRecord implements Serializable {
 
     public EmissionRecord product(Product product) {
         this.setProduct(product);
+        return this;
+    }
+
+    public String getTenantId() {
+        return this.tenantId;
+    }
+
+    public EmissionRecord tenantId(String tenantId) {
+        this.setTenantId(tenantId);
+        return this;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public java.util.Set<EmissionEvidence> getEvidences() {
+        return this.evidences;
+    }
+
+    public void setEvidences(java.util.Set<EmissionEvidence> emissionEvidences) {
+        if (this.evidences != null) {
+            this.evidences.forEach(i -> i.setEmissionRecord(null));
+        }
+        if (emissionEvidences != null) {
+            emissionEvidences.forEach(i -> i.setEmissionRecord(this));
+        }
+        this.evidences = emissionEvidences;
+    }
+
+    public EmissionRecord evidences(java.util.Set<EmissionEvidence> emissionEvidences) {
+        this.setEvidences(emissionEvidences);
+        return this;
+    }
+
+    public EmissionRecord addEvidences(EmissionEvidence emissionEvidence) {
+        this.evidences.add(emissionEvidence);
+        emissionEvidence.setEmissionRecord(this);
+        return this;
+    }
+
+    public EmissionRecord removeEvidences(EmissionEvidence emissionEvidence) {
+        this.evidences.remove(emissionEvidence);
+        emissionEvidence.setEmissionRecord(null);
+        return this;
+    }
+
+    public java.util.Set<AuditTrail> getAuditEntries() {
+        return this.auditEntries;
+    }
+
+    public void setAuditEntries(java.util.Set<AuditTrail> auditTrails) {
+        if (this.auditEntries != null) {
+            this.auditEntries.forEach(i -> i.setRelatedEmissionRecord(null));
+        }
+        if (auditTrails != null) {
+            auditTrails.forEach(i -> i.setRelatedEmissionRecord(this));
+        }
+        this.auditEntries = auditTrails;
+    }
+
+    public EmissionRecord auditEntries(java.util.Set<AuditTrail> auditTrails) {
+        this.setAuditEntries(auditTrails);
+        return this;
+    }
+
+    public EmissionRecord addAuditEntries(AuditTrail auditTrail) {
+        this.auditEntries.add(auditTrail);
+        auditTrail.setRelatedEmissionRecord(this);
+        return this;
+    }
+
+    public EmissionRecord removeAuditEntries(AuditTrail auditTrail) {
+        this.auditEntries.remove(auditTrail);
+        auditTrail.setRelatedEmissionRecord(null);
         return this;
     }
 
@@ -153,6 +330,12 @@ public class EmissionRecord implements Serializable {
             ", carbonGrams=" + getCarbonGrams() +
             ", dateRecorded='" + getDateRecorded() + "'" +
             ", source='" + getSource() + "'" +
+            ", notes='" + getNotes() + "'" +
+            ", verified='" + getVerified() + "'" +
+            ", confidenceScore=" + getConfidenceScore() +
+            ", evidenceRequired='" + getEvidenceRequired() + "'" +
+            ", auditRequired='" + getAuditRequired() + "'" +
+            ", tenantId='" + getTenantId() + "'" +
             "}";
     }
 }

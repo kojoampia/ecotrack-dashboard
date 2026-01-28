@@ -13,9 +13,8 @@
     <tr *ngFor="let entry of requestMetrics['percode'] | keyvalue">
       <td>{{ entry.key }}</td>
       <td>
-        <ngb-progressbar [max]="requestMetrics['all'].count" [value]="entry.value.count" [striped]="true" [animated]="false" type="success">
-          <span>{{ entry.value.count }}</span>
-        </ngb-progressbar>
+        <mat-progress-bar [value]="entry.value.count" [max]="requestMetrics['all'].count" color="primary"> </mat-progress-bar>
+        <span>{{ entry.value.count }}</span>
       </td>
       <td class="text-end">
         {{ filterNaN(entry.value.mean) | number: '1.0-2' }}

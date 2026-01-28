@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoTrack Pro | Keycloak & Spring Security Config</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #f8fafc; /* slate-50 */
+        color: #1e293b; /* slate-800 */
+      }
+
+      .code-font {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 400px;
+      }
+
+      .nav-item-active {
+        border-bottom: 2px solid #2563eb;
+        color: #2563eb;
+        font-weight: 700;
+      }
+
+      .syntax-keyword {
+        color: #d946ef;
+        font-weight: bold;
+      }
+      .syntax-class {
+        color: #2563eb;
+        font-weight: bold;
+      }
+      .syntax-string {
+        color: #10b981;
+      }
+      .syntax-comment {
+        color: #94a3b8;
+        font-style: italic;
+      }
+
+      .config-card {
+        transition: transform 0.2s ease-in-out;
+      }
+      .config-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .custom-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scroll::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <!-- HEADER -->
+      <header class="mb-12 border-b border-slate-200 pb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div>
+          <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
+            Security <span class="text-blue-600">Configuration</span> Blueprint
+          </h1>
+          <p class="mt-2 text-lg text-slate-500 font-medium">EcoTrack Pro | Spring Security 6 & Keycloak Integration</p>
+        </div>
+        <div class="flex gap-3">
+          <span
+            class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 uppercase tracking-widest border border-blue-200"
+            >OAuth 2.1</span
+          >
+          <span
+            class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700 uppercase tracking-widest border border-emerald-200"
+            >JWT / OIDC</span
+          >
+        </div>
+      </header>
+
+      <!-- INTRODUCTION -->
+      <section class="mb-16">
+        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+          <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">🛡️ Security Governance Overview</h2>
+          <p class="text-slate-600 leading-relaxed max-w-4xl">
+            This interactive report provides the technical implementation details for the <strong>EcoTrack Pro Security Layer</strong>. Our
+            architecture relies on Spring Security 6 to act as a Resource Server, delegating identity verification to
+            <strong>Keycloak</strong> via OpenID Connect (OIDC). The primary innovation in this configuration is the
+            <strong>Multi-Tenant JWT Converter</strong>, which extracts organizational context directly from cryptographically signed tokens
+            to drive Row-Level Security (RLS) policies at the database level.
+          </p>
+        </div>
+      </section>
+
+      <!-- MAIN INTERACTIVE EXPLORER -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <!-- LEFT: NAVIGATION & VISUALIZATION -->
+        <div class="lg:col-span-4 space-y-8">
+          <nav class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+            <h3 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4 px-2">Configuration Modules</h3>
+            <div class="flex flex-col gap-1">
+              <button
+                onclick="switchModule('filter')"
+                id="nav-filter"
+                class="w-full text-left px-4 py-3 rounded-xl transition-all font-semibold nav-item-active"
+              >
+                1. Security Filter Chain
+              </button>
+              <button
+                onclick="switchModule('converter')"
+                id="nav-converter"
+                class="w-full text-left px-4 py-3 rounded-xl transition-all font-semibold text-slate-500 hover:bg-slate-50"
+              >
+                2. Custom JWT Converter
+              </button>
+              <button
+                onclick="switchModule('tenant')"
+                id="nav-tenant"
+                class="w-full text-left px-4 py-3 rounded-xl transition-all font-semibold text-slate-500 hover:bg-slate-50"
+              >
+                3. Tenant Context Logic
+              </button>
+              <button
+                onclick="switchModule('props')"
+                id="nav-props"
+                class="w-full text-left px-4 py-3 rounded-xl transition-all font-semibold text-slate-500 hover:bg-slate-50"
+              >
+                4. Keycloak Properties
+              </button>
+            </div>
+          </nav>
+
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h3 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-6">Auth Latency Analysis</h3>
+            <div class="chart-container">
+              <canvas id="latencyChart"></canvas>
+            </div>
+            <div class="mt-6 text-xs text-slate-500 italic leading-relaxed">
+              Data shows the ms overhead for JWT validation vs direct local auth. The ~2.4ms overhead is an acceptable trade-off for
+              stateless scalability.
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: CONTENT VIEWER -->
+        <div class="lg:col-span-8">
+          <div
+            id="module-viewer"
+            class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden min-h-[600px] flex flex-col"
+          >
+            <!-- Content Header -->
+            <div class="p-8 border-b border-slate-50 bg-slate-50/50">
+              <h2 id="view-title" class="text-2xl font-black text-slate-900 mb-2">Security Filter Chain</h2>
+              <p id="view-desc" class="text-slate-500 text-sm">
+                Defines the stateless request processing pipeline and public/private endpoint boundaries.
+              </p>
+            </div>
+
+            <!-- Code Explorer -->
+            <div class="p-8 flex-grow">
+              <div class="bg-slate-900 rounded-2xl p-6 shadow-inner relative group">
+                <div
+                  class="absolute top-4 right-4 text-[10px] font-bold text-slate-600 uppercase tracking-widest group-hover:text-blue-400 transition-colors"
+                >
+                  java_config.src
+                </div>
+                <div
+                  id="code-content"
+                  class="code-font text-xs md:text-sm text-slate-300 overflow-x-auto leading-relaxed custom-scroll max-h-[500px]"
+                >
+                  <!-- Dynamically populated by JS -->
+                </div>
+              </div>
+
+              <!-- Technical Deep Dive (Logic explanation) -->
+              <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-blue-50 border border-blue-100 rounded-2xl">
+                  <h4 class="text-xs font-black uppercase text-blue-700 tracking-widest mb-2">Key takeaway</h4>
+                  <p id="logic-takeaway" class="text-xs text-blue-900 leading-relaxed font-medium">
+                    Uses Lambda DSL to secure endpoints while permitting public access to Actuator and Swagger docs.
+                  </p>
+                </div>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                  <h4 class="text-xs font-black uppercase text-slate-500 tracking-widest mb-2">Protocol</h4>
+                  <p id="protocol-info" class="text-xs text-slate-700 leading-relaxed font-medium">
+                    Stateless JWT authentication via Resource Server delegation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="mt-20 pt-10 border-t border-slate-200 text-center text-slate-400 text-sm">
+        <p>© 2026 EcoTrack Pro - Internal Technical Documentation</p>
+        <p class="mt-1 font-medium tracking-tight">Security Audit Level: Enterprise Grade (ISO 27001 Ready)</p>
+      </footer>
+    </div>
+
+    <script>
+      // --- DATA STATE ---
+      const configModules = {
+        filter: {
+          title: 'Security Filter Chain',
+          desc: 'The core Spring Security 6 processing pipeline. It enforces statelessness, CSRF protection, and endpoint-level authorization.',
+          takeaway:
+            "By using .sessionManagement(stateless), we ensure the application doesn't store state, allowing for horizontal pod scaling in Kubernetes.",
+          protocol: 'Standard OIDC Resource Server (JWT) with JWKS public key validation.',
+          code: `
+<span class="syntax-keyword">@Bean</span>
+<span class="syntax-keyword">public</span> <span class="syntax-class">SecurityFilterChain</span> <span class="syntax-class">filterChain</span>(<span class="syntax-class">HttpSecurity</span> http) <span class="syntax-keyword">throws</span> <span class="syntax-class">Exception</span> {
+    http
+        .<span class="syntax-class">csrf</span>(csrf -> csrf.disable()) <span class="syntax-comment">// Stateless APIs don't need CSRF</span>
+        .<span class="syntax-class">sessionManagement</span>(sm -> sm.sessionCreationPolicy(<span class="syntax-class">SessionCreationPolicy</span>.STATELESS))
+        .<span class="syntax-class">authorizeHttpRequests</span>(auth -> auth
+            .<span class="syntax-class">requestMatchers</span>(<span class="syntax-string">"/api/auth/**"</span>, <span class="syntax-string">"/v3/api-docs/**"</span>).permitAll()
+            .<span class="syntax-class">requestMatchers</span>(<span class="syntax-string">"/api/admin/**"</span>).hasRole(<span class="syntax-string">"ADMIN"</span>)
+            .<span class="syntax-class">anyRequest</span>().authenticated()
+        )
+        .<span class="syntax-class">oauth2ResourceServer</span>(oauth2 -> oauth2
+            .<span class="syntax-class">jwt</span>(jwt -> jwt.jwtAuthenticationConverter(grantedAuthoritiesConverter()))
+        );
+
+    <span class="syntax-keyword">return</span> http.build();
+}`,
+        },
+        converter: {
+          title: 'Custom JWT Converter',
+          desc: 'Maps Keycloak specific claims (resource_access) and business claims (tenant_id) into the Spring Security Context.',
+          takeaway: "This converter bridges the gap between Keycloak's JSON structure and Spring's GrantedAuthority model.",
+          protocol: 'JWT Claim Mapping (RS256 Signing)',
+          code: `
+<span class="syntax-keyword">private</span> <span class="syntax-class">Converter</span>&lt;<span class="syntax-class">Jwt</span>, <span class="syntax-class">AbstractAuthenticationToken</span>&gt; <span class="syntax-class">grantedAuthoritiesConverter</span>() {
+    <span class="syntax-class">JwtAuthenticationConverter</span> converter = <span class="syntax-keyword">new</span> <span class="syntax-class">JwtAuthenticationConverter</span>();
+    converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+        <span class="syntax-class">Collection</span>&lt;<span class="syntax-class">GrantedAuthority</span>&gt; authorities = <span class="syntax-keyword">new</span> <span class="syntax-class">ArrayList</span>&lt;&gt;();
+        
+        <span class="syntax-comment">// 1. Extract Keycloak Client Roles</span>
+        <span class="syntax-class">Map</span>&lt;<span class="syntax-class">String</span>, <span class="syntax-class">Object</span>&gt; resourceAccess = jwt.getClaim(<span class="syntax-string">"resource_access"</span>);
+        <span class="syntax-comment">// ... parsing logic for nested roles ...</span>
+        
+        <span class="syntax-comment">// 2. Add as ROLE_ prefixed authorities</span>
+        roles.forEach(role -> authorities.add(<span class="syntax-keyword">new</span> <span class="syntax-class">SimpleGrantedAuthority</span>(<span class="syntax-string">"ROLE_"</span> + role)));
+        
+        <span class="syntax-keyword">return</span> authorities;
+    });
+    <span class="syntax-keyword">return</span> converter;
+}`,
+        },
+        tenant: {
+          title: 'Tenant Context Logic',
+          desc: "An interceptor that extracts the 'tenant_id' from the security context and populates the database session variables.",
+          takeaway:
+            'Critical for Row-Level Security (RLS). This ensures that even if a developer forgets a WHERE clause, the DB isolates the data.',
+          protocol: 'JDBC Session Context Injection',
+          code: `
+<span class="syntax-keyword">@Component</span>
+<span class="syntax-keyword">public class</span> <span class="syntax-class">TenantInterceptor</span> <span class="syntax-keyword">implements</span> <span class="syntax-class">HandlerInterceptor</span> {
+
+    <span class="syntax-keyword">@Override</span>
+    <span class="syntax-keyword">public boolean</span> <span class="syntax-class">preHandle</span>(<span class="syntax-class">HttpServletRequest</span> req, <span class="syntax-class">HttpServletResponse</span> res, <span class="syntax-class">Object</span> handler) {
+        <span class="syntax-class">Authentication</span> auth = <span class="syntax-class">SecurityContextHolder</span>.getContext().getAuthentication();
+        <span class="syntax-keyword">if</span> (auth <span class="syntax-keyword">instanceof</span> <span class="syntax-class">JwtAuthenticationToken</span> jwtToken) {
+            <span class="syntax-class">String</span> tenantId = jwtToken.getTokenAttributes().get(<span class="syntax-string">"tenant_id"</span>).toString();
+            <span class="syntax-comment">// Push to ThreadLocal for Hibernate/JDBC to access</span>
+            <span class="syntax-class">TenantContext</span>.setCurrentTenant(tenantId);
+        }
+        <span class="syntax-keyword">return true</span>;
+    }
+}`,
+        },
+        props: {
+          title: 'Keycloak Properties',
+          desc: 'Externalized configuration (application.yml) that defines the connection parameters for the Keycloak instance.',
+          takeaway: 'Using the issuer-uri allows Spring to automatically fetch the JWKS endpoint for signature validation.',
+          protocol: 'YAML Configuration',
+          code: `
+<span class="syntax-keyword">spring:</span>
+  <span class="syntax-keyword">security:</span>
+    <span class="syntax-keyword">oauth2:</span>
+      <span class="syntax-keyword">resourceserver:</span>
+        <span class="syntax-keyword">jwt:</span>
+          <span class="syntax-comment"># The root URI of the Keycloak realm</span>
+          <span class="syntax-keyword">issuer-uri:</span> <span class="syntax-string">https://keycloak.ecotrack.pro/realms/ecotrack</span>
+          <span class="syntax-comment"># Specific audience validation</span>
+          <span class="syntax-keyword">audience:</span> <span class="syntax-string">ecotrack-backend</span>
+`,
+        },
+      };
+
+      // --- NAVIGATION LOGIC ---
+      function switchModule(id) {
+        // UI Update: Nav
+        const navIds = ['nav-filter', 'nav-converter', 'nav-tenant', 'nav-props'];
+        navIds.forEach(navId => {
+          const el = document.getElementById(navId);
+          el.classList.remove('nav-item-active', 'bg-slate-50', 'text-blue-600');
+          el.classList.add('text-slate-500');
+        });
+
+        const activeNav = document.getElementById(`nav-${id}`);
+        activeNav.classList.add('nav-item-active');
+        activeNav.classList.remove('text-slate-500');
+
+        // UI Update: Content
+        const module = configModules[id];
+        document.getElementById('view-title').innerText = module.title;
+        document.getElementById('view-desc').innerText = module.desc;
+        document.getElementById('code-content').innerHTML = `<pre>${module.code}</pre>`;
+        document.getElementById('logic-takeaway').innerText = module.takeaway;
+        document.getElementById('protocol-info').innerText = module.protocol;
+
+        // Trigger Animation
+        const viewer = document.getElementById('module-viewer');
+        viewer.classList.remove('animate-pulse');
+        void viewer.offsetWidth; // Reflow
+        viewer.classList.add('opacity-100');
+      }
+
+      // --- CHART INITIALIZATION ---
+      function initChart() {
+        const ctx = document.getElementById('latencyChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Signature Check', 'Claims Parsing', 'RLS Injection', 'DB Legacy Auth'],
+            datasets: [
+              {
+                label: 'Time (ms)',
+                data: [0.8, 1.2, 0.4, 45.0],
+                backgroundColor: ['rgba(37, 99, 235, 0.8)', 'rgba(37, 99, 235, 0.8)', 'rgba(16, 185, 129, 0.8)', 'rgba(241, 245, 249, 1)'],
+                borderRadius: 8,
+                barThickness: 40,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                display: true,
+                grid: { color: '#f1f5f9' },
+                ticks: { font: { size: 10, weight: 'bold' } },
+              },
+              x: { grid: { display: false } },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: '#0f172a',
+                titleFont: { size: 12 },
+                bodyFont: { size: 11 },
+                padding: 10,
+              },
+            },
+          },
+        });
+      }
+
+      // --- BOOTSTRAP ---
+      window.addEventListener('DOMContentLoaded', () => {
+        initChart();
+        switchModule('filter');
+      });
+    </script>
+  </body>
+</html>

@@ -19,6 +19,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'ecoTrackProApp.emissionRecord.home.title' },
         loadChildren: () => import('./emission-record/emission-record.routes'),
       },
+      {
+        path: 'product-passport',
+        data: { pageTitle: 'ecoTrackProApp.productPassport.home.title' },
+        loadChildren: () => import('./product-passport/product-passport.routes'),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

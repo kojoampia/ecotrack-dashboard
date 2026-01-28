@@ -1,11 +1,7 @@
 <form *ngIf="user" name="deleteForm" (ngSubmit)="confirmDelete(user.login!)">
-  <div class="modal-header">
-    <h4 class="modal-title" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
+  <h1 mat-dialog-title jhiTranslate="entity.delete.title">Confirm delete operation</h1>
 
-    <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
-  </div>
-
-  <div class="modal-body">
+  <div mat-dialog-content>
     <jhi-alert-error></jhi-alert-error>
 
     <p jhiTranslate="userManagement.delete.question" [translateValues]="{ login: user.login }">
@@ -13,12 +9,12 @@
     </p>
   </div>
 
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+  <div mat-dialog-actions>
+    <button mat-button (click)="cancel()">
       <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
     </button>
 
-    <button type="submit" class="btn btn-danger">
+    <button mat-raised-button color="warn" type="submit">
       <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
     </button>
   </div>

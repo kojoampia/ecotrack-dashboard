@@ -9,6 +9,8 @@ import { errorRoute } from './layouts/error/error.route';
 import HomeComponent from './home/home.component';
 import NavbarComponent from './layouts/navbar/navbar.component';
 import LoginComponent from './login/login.component';
+import { CarbonDashboardComponent } from './carbon-dashboard/carbon-dashboard.component';
+import { ReportCenterComponent } from './reports/report-center.component';
 
 @NgModule({
   imports: [
@@ -18,6 +20,16 @@ import LoginComponent from './login/login.component';
           path: '',
           component: HomeComponent,
           title: 'home.title',
+        },
+        {
+          path: 'carbon-dashboard',
+          component: CarbonDashboardComponent,
+          title: 'Carbon Dashboard',
+        },
+        {
+          path: 'report-center',
+          component: ReportCenterComponent,
+          title: 'Report Center',
         },
         {
           path: '',

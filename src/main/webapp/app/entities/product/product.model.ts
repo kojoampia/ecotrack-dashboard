@@ -6,7 +6,11 @@ export interface IProduct {
   name?: string | null;
   sku?: string | null;
   description?: string | null;
+  category?: string | null;
+  unitOfMeasure?: string | null;
+  totalCarbonFootprint?: number | null;
   createdDate?: dayjs.Dayjs | null;
+  lastModifiedDate?: dayjs.Dayjs | null;
   supplier?: Pick<ISupplier, 'id' | 'companyName'> | null;
 }
 

@@ -1,0 +1,4 @@
+id,entity_name,entity_id,action,modified_by,details,timestamp,tenant_id
+1,EmissionRecord,1,UPDATE,admin_steel,Manual adjustment of Scope 2 values based on bill correction,2026-01-15T09:30:00Z,tenant_steel_001
+2,Supplier,3,CREATE,cfo_green,Onboarded new logistics partner for Scope 3 tracking,2026-01-16T11:00:00Z,tenant_green_002
+3,Report,101,GENERATE,auditor_ext,Exported Q1 CBAM Preliminary Declaration,2026-01-20T16:45:00Z,tenant_steel_001

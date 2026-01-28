@@ -2,7 +2,6 @@ import { Component, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 
 import { Alert, AlertService } from 'app/core/util/alert.service';
@@ -13,7 +12,7 @@ import { AlertError } from './alert-error.model';
   standalone: true,
   selector: 'jhi-alert-error',
   templateUrl: './alert-error.component.html',
-  imports: [CommonModule, NgbModule],
+  imports: [CommonModule],
 })
 export class AlertErrorComponent implements OnDestroy {
   alerts: Alert[] = [];
@@ -104,10 +103,6 @@ export class AlertErrorComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.eventManager.destroy(this.errorListener);
     this.eventManager.destroy(this.httpErrorListener);
-  }
-
-  close(alert: Alert): void {
-    alert.close?.(this.alerts);
   }
 
   private addErrorAlert(message?: string, translationKey?: string, translationParams?: { [key: string]: unknown }): void {

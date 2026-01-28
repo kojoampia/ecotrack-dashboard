@@ -16,4 +16,9 @@ export const EntityNavbarItems: NavbarItem[] = [
     route: '/emission-record',
     translationKey: 'global.menu.entities.emissionRecord',
   },
+  {
+    name: 'ProductPassport',
+    route: '/product-passport',
+    translationKey: 'global.menu.entities.productPassport',
+  },
 ];

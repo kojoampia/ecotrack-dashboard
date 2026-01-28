@@ -2,6 +2,7 @@ package com.ecotrack.app.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -21,9 +22,19 @@ public class ProductDTO implements Serializable {
 
     private String description;
 
+    private String category;
+
+    private String unitOfMeasure;
+
+    private BigDecimal totalCarbonFootprint;
+
     private Instant createdDate;
 
+    private Instant lastModifiedDate;
+
     private SupplierDTO supplier;
+
+    private String tenantId;
 
     public Long getId() {
         return id;
@@ -57,6 +68,30 @@ public class ProductDTO implements Serializable {
         this.description = description;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getUnitOfMeasure() {
+        return unitOfMeasure;
+    }
+
+    public void setUnitOfMeasure(String unitOfMeasure) {
+        this.unitOfMeasure = unitOfMeasure;
+    }
+
+    public BigDecimal getTotalCarbonFootprint() {
+        return totalCarbonFootprint;
+    }
+
+    public void setTotalCarbonFootprint(BigDecimal totalCarbonFootprint) {
+        this.totalCarbonFootprint = totalCarbonFootprint;
+    }
+
     public Instant getCreatedDate() {
         return createdDate;
     }
@@ -65,12 +100,28 @@ public class ProductDTO implements Serializable {
         this.createdDate = createdDate;
     }
 
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
     public SupplierDTO getSupplier() {
         return supplier;
     }
 
     public void setSupplier(SupplierDTO supplier) {
         this.supplier = supplier;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     @Override
@@ -102,8 +153,13 @@ public class ProductDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", sku='" + getSku() + "'" +
             ", description='" + getDescription() + "'" +
+            ", category='" + getCategory() + "'" +
+            ", unitOfMeasure='" + getUnitOfMeasure() + "'" +
+            ", totalCarbonFootprint=" + getTotalCarbonFootprint() +
             ", createdDate='" + getCreatedDate() + "'" +
+            ", lastModifiedDate='" + getLastModifiedDate() + "'" +
             ", supplier=" + getSupplier() +
+            ", tenantId='" + getTenantId() + "'" +
             "}";
     }
 }

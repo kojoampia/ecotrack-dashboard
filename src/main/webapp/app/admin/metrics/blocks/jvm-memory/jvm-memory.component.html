@@ -15,14 +15,7 @@
       ></ng-template
     >
 
-    <ngb-progressbar
-      *ngIf="entry.value.max !== -1"
-      type="success"
-      [value]="(100 * entry.value.used) / entry.value.max"
-      [striped]="true"
-      [animated]="false"
-    >
-      <span>{{ (entry.value.used * 100) / entry.value.max | number: '1.0-0' }}%</span>
-    </ngb-progressbar>
+    <mat-progress-bar *ngIf="entry.value.max !== -1" [value]="(100 * entry.value.used) / entry.value.max"> </mat-progress-bar>
+    <span *ngIf="entry.value.max !== -1">{{ (entry.value.used * 100) / entry.value.max | number: '1.0-0' }}%</span>
   </div>
 </div>

@@ -1,7 +1,7 @@
 package com.ecotrack.app.service.dto;
 
 import com.ecotrack.app.domain.enumeration.Scope;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -24,7 +24,13 @@ public class EmissionRecordDTO implements Serializable {
 
     private String source;
 
+    private String notes;
+
+    private Boolean verified;
+
     private ProductDTO product;
+
+    private String tenantId;
 
     public Long getId() {
         return id;
@@ -66,12 +72,36 @@ public class EmissionRecordDTO implements Serializable {
         this.source = source;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
     public ProductDTO getProduct() {
         return product;
     }
 
     public void setProduct(ProductDTO product) {
         this.product = product;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     @Override
@@ -104,7 +134,10 @@ public class EmissionRecordDTO implements Serializable {
             ", carbonGrams=" + getCarbonGrams() +
             ", dateRecorded='" + getDateRecorded() + "'" +
             ", source='" + getSource() + "'" +
+            ", notes='" + getNotes() + "'" +
+            ", verified='" + getVerified() + "'" +
             ", product=" + getProduct() +
+            ", tenantId='" + getTenantId() + "'" +
             "}";
     }
 }

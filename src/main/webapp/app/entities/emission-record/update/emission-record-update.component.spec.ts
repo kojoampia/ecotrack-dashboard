@@ -50,10 +50,10 @@ describe('EmissionRecord Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call Product query and add missing value', () => {
       const emissionRecord: IEmissionRecord = { id: 456 };
-      const product: IProduct = { id: 24191 };
+      const product: IProduct = { id: 15076 };
       emissionRecord.product = product;
 
-      const productCollection: IProduct[] = [{ id: 17031 }];
+      const productCollection: IProduct[] = [{ id: 10182 }];
       jest.spyOn(productService, 'query').mockReturnValue(of(new HttpResponse({ body: productCollection })));
       const additionalProducts = [product];
       const expectedCollection: IProduct[] = [...additionalProducts, ...productCollection];
@@ -72,7 +72,7 @@ describe('EmissionRecord Management Update Component', () => {
 
     it('Should update editForm', () => {
       const emissionRecord: IEmissionRecord = { id: 456 };
-      const product: IProduct = { id: 1389 };
+      const product: IProduct = { id: 25397 };
       emissionRecord.product = product;
 
       activatedRoute.data = of({ emissionRecord });

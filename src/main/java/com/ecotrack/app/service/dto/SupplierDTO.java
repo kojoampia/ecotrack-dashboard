@@ -22,6 +22,14 @@ public class SupplierDTO implements Serializable {
 
     private Integer tier;
 
+    private String address;
+
+    private String phone;
+
+    private String website;
+
+    private String tenantId;
+
     public Long getId() {
         return id;
     }
@@ -62,6 +70,38 @@ public class SupplierDTO implements Serializable {
         this.tier = tier;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -92,6 +132,10 @@ public class SupplierDTO implements Serializable {
             ", contactEmail='" + getContactEmail() + "'" +
             ", industry='" + getIndustry() + "'" +
             ", tier=" + getTier() +
+            ", address='" + getAddress() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", website='" + getWebsite() + "'" +
+            ", tenantId='" + getTenantId() + "'" +
             "}";
     }
 }

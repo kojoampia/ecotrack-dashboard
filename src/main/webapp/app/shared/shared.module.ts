@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -16,7 +16,6 @@ import { AlertErrorComponent } from './alert/alert-error.component';
   imports: [AlertComponent, AlertErrorComponent, FindLanguageFromKeyPipe, TranslateDirective],
   exports: [
     CommonModule,
-    NgbModule,
     FontAwesomeModule,
     AlertComponent,
     AlertErrorComponent,

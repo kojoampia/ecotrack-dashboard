@@ -24,6 +24,8 @@ describe('EmissionRecord Form Service', () => {
             carbonGrams: expect.any(Object),
             dateRecorded: expect.any(Object),
             source: expect.any(Object),
+            notes: expect.any(Object),
+            verified: expect.any(Object),
             product: expect.any(Object),
           }),
         );
@@ -39,6 +41,8 @@ describe('EmissionRecord Form Service', () => {
             carbonGrams: expect.any(Object),
             dateRecorded: expect.any(Object),
             source: expect.any(Object),
+            notes: expect.any(Object),
+            verified: expect.any(Object),
             product: expect.any(Object),
           }),
         );

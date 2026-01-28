@@ -30,6 +30,18 @@
         <dd>
           <span>{{ supplier.tier }}</span>
         </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.supplier.address">Address</span></dt>
+        <dd>
+          <span>{{ supplier.address }}</span>
+        </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.supplier.phone">Phone</span></dt>
+        <dd>
+          <span>{{ supplier.phone }}</span>
+        </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.supplier.website">Website</span></dt>
+        <dd>
+          <span>{{ supplier.website }}</span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

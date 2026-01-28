@@ -52,7 +52,7 @@ spring:
     cache: false
 
 server:
-  port: 8080
+  port: 8081
 
 # ===================================================================
 # JHipster specific properties
@@ -102,4 +102,7 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
+ecotrack:
+  webhook:
+    secret: dev-webhook-secret
 # application:

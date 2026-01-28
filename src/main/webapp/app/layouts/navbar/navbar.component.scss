@@ -1,6 +1,3 @@
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-
 /* ==========================================================================
 Navbar
 ========================================================================== */
@@ -33,4 +30,13 @@ Logo styles
   vertical-align: middle;
   background: url('/content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
+}
+
+.navbar fa-icon {
+  margin-right: 5px;
+  color: #fff;
+}
+
+.dropdown-item fa-icon {
+  color: #333;
 }

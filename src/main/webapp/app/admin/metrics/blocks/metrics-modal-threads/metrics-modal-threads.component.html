@@ -1,35 +1,32 @@
-<div class="modal-header">
-  <h4 class="modal-title" jhiTranslate="metrics.jvm.threads.dump.title">Threads dump</h4>
-
-  <button type="button" class="btn-close" (click)="dismiss()">&times;</button>
-</div>
-
-<div class="modal-body">
+<h1 mat-dialog-title jhiTranslate="metrics.jvm.threads.dump.title">Threads dump</h1>
+<div mat-dialog-content>
   <div class="mb-3">
-    <span class="badge bg-primary hand" (click)="threadStateFilter = undefined">
-      <fa-icon *ngIf="threadStateFilter === undefined" icon="check"></fa-icon>
-      All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpAll }}</span>
-    </span>
+    <mat-chip-listbox>
+      <mat-chip-option (click)="threadStateFilter = undefined" selected>
+        <fa-icon *ngIf="threadStateFilter === undefined" icon="check"></fa-icon>
+        All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpAll }}</span>
+      </mat-chip-option>
 
-    <span class="badge bg-success hand" (click)="threadStateFilter = ThreadState.Runnable">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Runnable" icon="check"></fa-icon>
-      Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpRunnable }}</span>
-    </span>
+      <mat-chip-option (click)="threadStateFilter = ThreadState.Runnable" color="primary">
+        <fa-icon *ngIf="threadStateFilter === ThreadState.Runnable" icon="check"></fa-icon>
+        Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpRunnable }}</span>
+      </mat-chip-option>
 
-    <span class="badge bg-info hand" (click)="threadStateFilter = ThreadState.Waiting">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Waiting" icon="check"></fa-icon>
-      Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpWaiting }}</span>
-    </span>
+      <mat-chip-option (click)="threadStateFilter = ThreadState.Waiting" color="accent">
+        <fa-icon *ngIf="threadStateFilter === ThreadState.Waiting" icon="check"></fa-icon>
+        Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpWaiting }}</span>
+      </mat-chip-option>
 
-    <span class="badge bg-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.TimedWaiting" icon="check"></fa-icon>
-      Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpTimedWaiting }}</span>
-    </span>
+      <mat-chip-option (click)="threadStateFilter = ThreadState.TimedWaiting" color="warn">
+        <fa-icon *ngIf="threadStateFilter === ThreadState.TimedWaiting" icon="check"></fa-icon>
+        Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpTimedWaiting }}</span>
+      </mat-chip-option>
 
-    <span class="badge bg-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Blocked" icon="check"></fa-icon>
-      Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpBlocked }}</span>
-    </span>
+      <mat-chip-option (click)="threadStateFilter = ThreadState.Blocked" color="warn">
+        <fa-icon *ngIf="threadStateFilter === ThreadState.Blocked" icon="check"></fa-icon>
+        Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpBlocked }}</span>
+      </mat-chip-option>
+    </mat-chip-listbox>
   </div>
 
   <div class="pad" *ngFor="let thread of getThreads()">
@@ -44,8 +41,8 @@
       </a>
     </h6>
 
-    <div class="card" [hidden]="!thread.showThreadDump">
-      <div class="card-body">
+    <mat-card [hidden]="!thread.showThreadDump">
+      <mat-card-content>
         <div *ngFor="let st of thread.stackTrace" class="break">
           <samp
             >{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code
@@ -53,38 +50,31 @@
           >
           <span class="mt-1"></span>
         </div>
-      </div>
-    </div>
-    <table class="table table-sm table-responsive">
-      <caption>
-        Threads dump:
-        {{
-          thread.threadName
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col" jhiTranslate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
-          <th scope="col" jhiTranslate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
-          <th scope="col" jhiTranslate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
-          <th scope="col" jhiTranslate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
-          <th scope="col" jhiTranslate="metrics.jvm.threads.dump.lockname">Lock name</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ thread.blockedTime }}</td>
-          <td>{{ thread.blockedCount }}</td>
-          <td>{{ thread.waitedTime }}</td>
-          <td>{{ thread.waitedCount }}</td>
-          <td class="thread-dump-modal-lock" title="{{ thread.lockName }}">
-            <code>{{ thread.lockName }}</code>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-3">
+            <span jhiTranslate="metrics.jvm.threads.dump.blockedtime">Blocked Time</span>: {{ thread.blockedTime }}
+          </div>
+          <div class="col-md-3">
+            <span jhiTranslate="metrics.jvm.threads.dump.blockedcount">Blocked Count</span>: {{ thread.blockedCount }}
+          </div>
+          <div class="col-md-3"><span jhiTranslate="metrics.jvm.threads.dump.waitedtime">Waited Time</span>: {{ thread.waitedTime }}</div>
+          <div class="col-md-3">
+            <span jhiTranslate="metrics.jvm.threads.dump.waitedcount">Waited Count</span>: {{ thread.waitedCount }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" title="{{ thread.lockName }}">
+            <span jhiTranslate="metrics.jvm.threads.dump.lockname">Lock name</span>: <code>{{ thread.lockName }}</code>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-secondary float-start" data-dismiss="modal" (click)="dismiss()">Done</button>
+<div mat-dialog-actions>
+  <button mat-button (click)="dismiss()">Done</button>
 </div>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog-ext/dbchangelog-ext-4.17.xsd">
+
+    <!--
+        Added the new entities for Green Ledger: EmissionEvidence, AuditTrail, ComplianceReport
+    -->
+    <changeSet id="20240101000001" author="jhipster">
+        <createTable tableName="emission_evidence">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="evidence_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_name" type="varchar(255)"/>
+            <column name="file_path" type="varchar(500)"/>
+            <column name="file_size" type="bigint"/>
+            <column name="mime_type" type="varchar(255)"/>
+            <column name="checksum" type="varchar(255)"/>
+            <column name="uploaded_at" type="timestamp"/>
+            <column name="verified" type="boolean"/>
+            <column name="verification_notes" type="text"/>
+            <column name="retention_period" type="integer"/>
+            <column name="legal_reference" type="varchar(500)"/>
+            <column name="emission_record_id" type="bigint"/>
+            <column name="tenant_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="audit_trail">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="action" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entity_type" type="varchar(255)"/>
+            <column name="entity_id" type="varchar(255)"/>
+            <column name="old_values" type="text"/>
+            <column name="new_values" type="text"/>
+            <column name="change_reason" type="varchar(500)"/>
+            <column name="ip_address" type="varchar(45)"/>
+            <column name="user_agent" type="varchar(500)"/>
+            <column name="timestamp" type="timestamp"/>
+            <column name="user_id" type="varchar(255)"/>
+            <column name="user_name" type="varchar(255)"/>
+            <column name="emission_record_id" type="bigint"/>
+            <column name="tenant_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="compliance_report">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="report_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="report_period_start" type="timestamp"/>
+            <column name="report_period_end" type="timestamp"/>
+            <column name="total_emissions" type="decimal(21,2)"/>
+            <column name="scope_1_emissions" type="decimal(21,2)"/>
+            <column name="scope_2_emissions" type="decimal(21,2)"/>
+            <column name="scope_3_emissions" type="decimal(21,2)"/>
+            <column name="compliance_threshold" type="decimal(21,2)"/>
+            <column name="compliance_score" type="decimal(21,2)"/>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="submitted_at" type="timestamp"/>
+            <column name="approved_at" type="timestamp"/>
+            <column name="rejected_at" type="timestamp"/>
+            <column name="rejection_reason" type="text"/>
+            <column name="regulatory_reference" type="varchar(500)"/>
+            <column name="payload_generated" type="boolean"/>
+            <column name="payload_path" type="varchar(500)"/>
+            <column name="checksum" type="varchar(255)"/>
+            <column name="tenant_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Add new columns to emission_record table -->
+        <addColumn tableName="emission_record">
+            <column name="confidence_score" type="integer"/>
+            <column name="evidence_required" type="boolean"/>
+            <column name="audit_required" type="boolean"/>
+        </addColumn>
+
+        <!-- Create sequences for new entities -->
+        <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="20240101000002" author="jhipster">
+        <!-- Add foreign key constraints -->
+        <addForeignKeyConstraint
+            baseTableName="emission_evidence"
+            baseColumnNames="emission_record_id"
+            referencedTableName="emission_record"
+            referencedColumnNames="id"
+            constraintName="fk_emission_evidence_emission_record_id"/>
+
+        <addForeignKeyConstraint
+            baseTableName="audit_trail"
+            baseColumnNames="emission_record_id"
+            referencedTableName="emission_record"
+            referencedColumnNames="id"
+            constraintName="fk_audit_trail_emission_record_id"/>
+    </changeSet>
+
+    <changeSet id="20240101000003" author="jhipster">
+        <!-- Add RLS policies for multi-tenancy -->
+        <sql>
+            ALTER TABLE emission_evidence ENABLE ROW LEVEL SECURITY;
+            ALTER TABLE audit_trail ENABLE ROW LEVEL SECURITY;
+            ALTER TABLE compliance_report ENABLE ROW LEVEL SECURITY;
+
+            CREATE POLICY emission_evidence_tenant_policy ON emission_evidence
+                USING (tenant_id = current_setting('app.current_tenant'));
+
+            CREATE POLICY audit_trail_tenant_policy ON audit_trail
+                USING (tenant_id = current_setting('app.current_tenant'));
+
+            CREATE POLICY compliance_report_tenant_policy ON compliance_report
+                USING (tenant_id = current_setting('app.current_tenant'));
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,114 @@
+.compliance-overview {
+  padding: 20px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-card {
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: slideIn 0.6s ease-out;
+
+  mat-card-content {
+    display: flex;
+    gap: 10px;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.stats-grid {
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: scaleIn 0.7s ease-out;
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #4caf50; // Emerald-500
+  }
+
+  .stat-unit {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .stat-subtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 5px;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .chart-card {
+    flex: 1;
+    min-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: fadeInUp 0.8s ease-out;
+
+    mat-card-header {
+      mat-card-title {
+        font-weight: 900;
+        color: #4caf50;
+      }
+    }
+
+    mat-card-content {
+      height: 300px;
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,8 +1,9 @@
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse, HttpHeaders } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
@@ -19,7 +20,15 @@ import UserManagementDeleteDialogComponent from '../delete/user-management-delet
   standalone: true,
   selector: 'jhi-user-mgmt',
   templateUrl: './user-management.component.html',
-  imports: [RouterModule, SharedModule, SortDirective, SortByDirective, UserManagementDeleteDialogComponent, ItemCountComponent],
+  imports: [
+    RouterModule,
+    SharedModule,
+    SortDirective,
+    SortByDirective,
+    UserManagementDeleteDialogComponent,
+    ItemCountComponent,
+    MatPaginatorModule,
+  ],
 })
 export default class UserManagementComponent implements OnInit {
   currentAccount: Account | null = null;
@@ -36,7 +45,7 @@ export default class UserManagementComponent implements OnInit {
     private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private modalService: NgbModal,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -53,10 +62,8 @@ export default class UserManagementComponent implements OnInit {
   }
 
   deleteUser(user: User): void {
-    const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.user = user;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
+    const modalRef = this.dialog.open(UserManagementDeleteDialogComponent, { data: { user } });
+    modalRef.afterClosed().subscribe(reason => {
       if (reason === 'deleted') {
         this.loadAll();
       }
@@ -67,7 +74,7 @@ export default class UserManagementComponent implements OnInit {
     this.isLoading = true;
     this.userService
       .query({
-        page: this.page - 1,
+        page: this.page,
         size: this.itemsPerPage,
         sort: this.sort(),
       })
@@ -80,11 +87,15 @@ export default class UserManagementComponent implements OnInit {
       });
   }
 
-  transition(): void {
+  transition(event?: PageEvent): void {
+    if (event) {
+      this.page = event.pageIndex;
+      this.itemsPerPage = event.pageSize;
+    }
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute.parent,
       queryParams: {
-        page: this.page,
+        page: this.page + 1,
         sort: `${this.predicate},${this.ascending ? ASC : DESC}`,
       },
     });
@@ -93,7 +104,7 @@ export default class UserManagementComponent implements OnInit {
   private handleNavigation(): void {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
       const page = params.get('page');
-      this.page = +(page ?? 1);
+      this.page = +(page ?? 1) - 1;
       const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
       this.predicate = sort[0];
       this.ascending = sort[1] === ASC;

@@ -9,6 +9,7 @@ import { ProductService, RestProduct } from './product.service';
 const requireRestSample: RestProduct = {
   ...sampleWithRequiredData,
   createdDate: sampleWithRequiredData.createdDate?.toJSON(),
+  lastModifiedDate: sampleWithRequiredData.lastModifiedDate?.toJSON(),
 };
 
 describe('Product Service', () => {

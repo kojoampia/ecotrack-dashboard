@@ -1,0 +1,33 @@
+server:
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+ingester:
+  max_block_duration: 5m               # Cut blocks frequently for demo purposes
+  lifecycler:
+    ring:
+      replication_factor: 1
+      kvstore:
+        store: inmemory
+
+compactor:
+  config:
+    max_compaction_objects: 1000000
+    retention_enabled: true
+    max_retention_period: 14d
+
+storage:
+  trace:
+    backend: local                     # Using local filesystem for simplicity
+    local:
+      path: /var/tempo/blocks
+    wal:
+      path: /var/tempo/wal             # Write Ahead Log for crash recovery

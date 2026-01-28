@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { HealthKey, HealthDetails } from '../health.model';
@@ -8,12 +9,17 @@ import { HealthKey, HealthDetails } from '../health.model';
   standalone: true,
   selector: 'jhi-health-modal',
   templateUrl: './health-modal.component.html',
-  imports: [SharedModule],
+  imports: [SharedModule, MatDialogModule, MatButtonModule],
 })
 export default class HealthModalComponent {
   health?: { key: HealthKey; value: HealthDetails };
 
-  constructor(private activeModal: NgbActiveModal) {}
+  constructor(
+    public dialogRef: MatDialogRef<HealthModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { health: { key: HealthKey; value: HealthDetails } },
+  ) {
+    this.health = data.health;
+  }
 
   readableValue(value: any): string {
     if (this.health?.key === 'diskSpace') {
@@ -32,6 +38,6 @@ export default class HealthModalComponent {
   }
 
   dismiss(): void {
-    this.activeModal.dismiss();
+    this.dialogRef.close();
   }
 }

@@ -50,9 +50,11 @@ public class CacheConfiguration {
             createCache(cm, com.ecotrack.app.domain.User.class.getName() + ".authorities");
             createCache(cm, com.ecotrack.app.domain.Product.class.getName());
             createCache(cm, com.ecotrack.app.domain.Product.class.getName() + ".emissionRecords");
+            createCache(cm, com.ecotrack.app.domain.Product.class.getName() + ".passports");
             createCache(cm, com.ecotrack.app.domain.Supplier.class.getName());
             createCache(cm, com.ecotrack.app.domain.Supplier.class.getName() + ".products");
             createCache(cm, com.ecotrack.app.domain.EmissionRecord.class.getName());
+            createCache(cm, com.ecotrack.app.domain.ProductPassport.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

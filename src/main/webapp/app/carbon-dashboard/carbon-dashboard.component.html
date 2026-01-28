@@ -1,0 +1,85 @@
+<div class="compliance-overview">
+  <h2>Compliance Overview</h2>
+
+  <!-- Menu Items -->
+  <mat-card class="menu-card">
+    <mat-card-header>
+      <mat-card-title>Dashboard Views</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <button mat-button (click)="selectedView = 'overview'">Overview</button>
+      <button mat-button (click)="selectedView = 'scopes'">Emission Scopes</button>
+      <button mat-button (click)="selectedView = 'trend'">Emissions Trend</button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Stats Grid -->
+  <mat-grid-list cols="4" rowHeight="100px" class="stats-grid">
+    <mat-grid-tile>
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-number">{{ totalFootprint | number: '1.0-0' }}</div>
+          <div class="stat-unit">kg CO2e</div>
+          <div class="stat-subtitle">Total Footprint</div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+  <!-- Charts Section -->
+  <div class="charts-container">
+    <mat-card class="chart-card" *ngIf="selectedView === 'overview' || selectedView === 'scopes'">
+      <mat-card-header>
+        <mat-card-title>Emissions by Source</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ngx-charts-bar-vertical-stacked
+          [view]="view"
+          [results]="multi"
+          [scheme]="colorScheme"
+          [legend]="showLegend"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+        >
+        </ngx-charts-bar-vertical-stacked>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card" *ngIf="selectedView === 'overview' || selectedView === 'trend'">
+      <mat-card-header>
+        <mat-card-title>Emissions Trend</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ngx-charts-line-chart
+          [view]="lineView"
+          [results]="emissionsTrendData"
+          [scheme]="colorScheme"
+          [legend]="showLegend"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Time'"
+          [yAxisLabel]="'Emissions (kg CO2e)'"
+        >
+        </ngx-charts-line-chart>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card" *ngIf="selectedView === 'overview'">
+      <mat-card-header>
+        <mat-card-title>Scope Distribution</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ngx-charts-pie-chart
+          [view]="pieView"
+          [results]="emissionsBySourceData"
+          [scheme]="colorScheme"
+          [legend]="showLegend"
+          [labels]="true"
+        >
+        </ngx-charts-pie-chart>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

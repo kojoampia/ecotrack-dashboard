@@ -1,3 +1,4 @@
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
@@ -9,7 +10,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: 'jhi-metrics-request',
   templateUrl: './metrics-request.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+  imports: [SharedModule, MatProgressBarModule],
 })
 export class MetricsRequestComponent {
   /**

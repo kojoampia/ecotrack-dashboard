@@ -2,7 +2,7 @@ package com.ecotrack.app.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import com.ecotrack.app.security.*;
+import com.ecotrack.app.security.AuthoritiesConstants;
 import com.ecotrack.app.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +44,7 @@ public class SecurityConfiguration {
             .cors(withDefaults())
             .csrf(csrf -> csrf.disable())
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+            .addFilterAfter(new TenantFilter(), SpaWebFilter.class)
             .headers(headers ->
                 headers
                     .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))

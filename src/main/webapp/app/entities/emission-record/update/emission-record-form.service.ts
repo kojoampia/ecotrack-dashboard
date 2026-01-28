@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type EmissionRecordFormGroupInput = IEmissionRecord | PartialWithRequiredKeyOf<NewEmissionRecord>;
 
-type EmissionRecordFormDefaults = Pick<NewEmissionRecord, 'id'>;
+type EmissionRecordFormDefaults = Pick<NewEmissionRecord, 'id' | 'verified'>;
 
 type EmissionRecordFormGroupContent = {
   id: FormControl<IEmissionRecord['id'] | NewEmissionRecord['id']>;
@@ -22,6 +22,8 @@ type EmissionRecordFormGroupContent = {
   carbonGrams: FormControl<IEmissionRecord['carbonGrams']>;
   dateRecorded: FormControl<IEmissionRecord['dateRecorded']>;
   source: FormControl<IEmissionRecord['source']>;
+  notes: FormControl<IEmissionRecord['notes']>;
+  verified: FormControl<IEmissionRecord['verified']>;
   product: FormControl<IEmissionRecord['product']>;
 };
 
@@ -50,6 +52,8 @@ export class EmissionRecordFormService {
       }),
       dateRecorded: new FormControl(emissionRecordRawValue.dateRecorded),
       source: new FormControl(emissionRecordRawValue.source),
+      notes: new FormControl(emissionRecordRawValue.notes),
+      verified: new FormControl(emissionRecordRawValue.verified),
       product: new FormControl(emissionRecordRawValue.product),
     });
   }
@@ -71,6 +75,7 @@ export class EmissionRecordFormService {
   private getFormDefaults(): EmissionRecordFormDefaults {
     return {
       id: null,
+      verified: false,
     };
   }
 }

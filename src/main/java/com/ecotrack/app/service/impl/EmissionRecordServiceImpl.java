@@ -1,5 +1,6 @@
 package com.ecotrack.app.service.impl;
 
+import com.ecotrack.app.config.TenantContext;
 import com.ecotrack.app.domain.EmissionRecord;
 import com.ecotrack.app.repository.EmissionRecordRepository;
 import com.ecotrack.app.service.EmissionRecordService;
@@ -35,6 +36,7 @@ public class EmissionRecordServiceImpl implements EmissionRecordService {
     public EmissionRecordDTO save(EmissionRecordDTO emissionRecordDTO) {
         log.debug("Request to save EmissionRecord : {}", emissionRecordDTO);
         EmissionRecord emissionRecord = emissionRecordMapper.toEntity(emissionRecordDTO);
+        emissionRecord.setTenantId(TenantContext.getCurrentTenant());
         emissionRecord = emissionRecordRepository.save(emissionRecord);
         return emissionRecordMapper.toDto(emissionRecord);
     }
@@ -43,6 +45,7 @@ public class EmissionRecordServiceImpl implements EmissionRecordService {
     public EmissionRecordDTO update(EmissionRecordDTO emissionRecordDTO) {
         log.debug("Request to update EmissionRecord : {}", emissionRecordDTO);
         EmissionRecord emissionRecord = emissionRecordMapper.toEntity(emissionRecordDTO);
+        emissionRecord.setTenantId(TenantContext.getCurrentTenant());
         emissionRecord = emissionRecordRepository.save(emissionRecord);
         return emissionRecordMapper.toDto(emissionRecord);
     }

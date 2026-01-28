@@ -1,5 +1,6 @@
 package com.ecotrack.app.service.impl;
 
+import com.ecotrack.app.config.TenantContext;
 import com.ecotrack.app.domain.Supplier;
 import com.ecotrack.app.repository.SupplierRepository;
 import com.ecotrack.app.service.SupplierService;
@@ -35,6 +36,7 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierDTO save(SupplierDTO supplierDTO) {
         log.debug("Request to save Supplier : {}", supplierDTO);
         Supplier supplier = supplierMapper.toEntity(supplierDTO);
+        supplier.setTenantId(TenantContext.getCurrentTenant());
         supplier = supplierRepository.save(supplier);
         return supplierMapper.toDto(supplier);
     }
@@ -43,6 +45,7 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierDTO update(SupplierDTO supplierDTO) {
         log.debug("Request to update Supplier : {}", supplierDTO);
         Supplier supplier = supplierMapper.toEntity(supplierDTO);
+        supplier.setTenantId(TenantContext.getCurrentTenant());
         supplier = supplierRepository.save(supplier);
         return supplierMapper.toDto(supplier);
     }

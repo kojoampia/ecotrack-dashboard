@@ -13,8 +13,9 @@ import { IProduct, NewProduct } from '../product.model';
 
 export type PartialUpdateProduct = Partial<IProduct> & Pick<IProduct, 'id'>;
 
-type RestOf<T extends IProduct | NewProduct> = Omit<T, 'createdDate'> & {
+type RestOf<T extends IProduct | NewProduct> = Omit<T, 'createdDate' | 'lastModifiedDate'> & {
   createdDate?: string | null;
+  lastModifiedDate?: string | null;
 };
 
 export type RestProduct = RestOf<IProduct>;
@@ -105,6 +106,7 @@ export class ProductService {
     return {
       ...product,
       createdDate: product.createdDate?.toJSON() ?? null,
+      lastModifiedDate: product.lastModifiedDate?.toJSON() ?? null,
     };
   }
 
@@ -112,6 +114,7 @@ export class ProductService {
     return {
       ...restProduct,
       createdDate: restProduct.createdDate ? dayjs(restProduct.createdDate) : undefined,
+      lastModifiedDate: restProduct.lastModifiedDate ? dayjs(restProduct.lastModifiedDate) : undefined,
     };
   }
 

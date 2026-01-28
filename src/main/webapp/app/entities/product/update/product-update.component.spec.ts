@@ -50,10 +50,10 @@ describe('Product Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call Supplier query and add missing value', () => {
       const product: IProduct = { id: 456 };
-      const supplier: ISupplier = { id: 30678 };
+      const supplier: ISupplier = { id: 27480 };
       product.supplier = supplier;
 
-      const supplierCollection: ISupplier[] = [{ id: 19715 }];
+      const supplierCollection: ISupplier[] = [{ id: 22757 }];
       jest.spyOn(supplierService, 'query').mockReturnValue(of(new HttpResponse({ body: supplierCollection })));
       const additionalSuppliers = [supplier];
       const expectedCollection: ISupplier[] = [...additionalSuppliers, ...supplierCollection];
@@ -72,7 +72,7 @@ describe('Product Management Update Component', () => {
 
     it('Should update editForm', () => {
       const product: IProduct = { id: 456 };
-      const supplier: ISupplier = { id: 11698 };
+      const supplier: ISupplier = { id: 29171 };
       product.supplier = supplier;
 
       activatedRoute.data = of({ product });

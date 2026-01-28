@@ -23,7 +23,11 @@ describe('Product Form Service', () => {
             name: expect.any(Object),
             sku: expect.any(Object),
             description: expect.any(Object),
+            category: expect.any(Object),
+            unitOfMeasure: expect.any(Object),
+            totalCarbonFootprint: expect.any(Object),
             createdDate: expect.any(Object),
+            lastModifiedDate: expect.any(Object),
             supplier: expect.any(Object),
           }),
         );
@@ -38,7 +42,11 @@ describe('Product Form Service', () => {
             name: expect.any(Object),
             sku: expect.any(Object),
             description: expect.any(Object),
+            category: expect.any(Object),
+            unitOfMeasure: expect.any(Object),
+            totalCarbonFootprint: expect.any(Object),
             createdDate: expect.any(Object),
+            lastModifiedDate: expect.any(Object),
             supplier: expect.any(Object),
           }),
         );

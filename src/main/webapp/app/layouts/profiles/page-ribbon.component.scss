@@ -12,14 +12,14 @@ Developement Ribbon
   pointer-events: none;
   opacity: 0.75;
   a {
-    color: #fff;
+    color: var(--mat-sys-on-error);
     display: block;
     font-weight: 400;
     margin: 1px 0;
     padding: 10px 50px;
     text-align: center;
     text-decoration: none;
-    text-shadow: 0 0 5px #444;
+    text-shadow: 0 0 5px var(--mat-sys-outline);
     pointer-events: none;
   }
 }

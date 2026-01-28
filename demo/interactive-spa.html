@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoTrack Pro: Enterprise Compliance Hub</title>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Chosen Palette: Cyber-Industrial
+         Background: #050505 (Deep Space Black)
+         Primary: #10b981 (Emerald 500) - Represents "Green/Verified"
+         Secondary: #3b82f6 (Blue 600) - Represents "Technology/Trust"
+         Alert: #ef4444 (Rose 500) - Represents "Breach/Risk"
+         Surface: Glassmorphism (White opacity)
+    -->
+
+    <!-- Application Structure Plan:
+         The application is designed as a high-fidelity "Command Center" for the Vigilant CFO and Compliance Architect.
+         1. Global Sidebar: Persistent navigation for rapid context switching (Dashboard, Ledger, Neural AI, Supply Chain, Audit).
+         2. Dynamic Header: Context-aware status, tenant selection (SteelWorks GmbH), and global actions.
+         3. Dashboard (Landing): High-level financial risk exposure (CBAM liability), real-time budget tracking (Redis simulation), and compliance scores.
+         4. The Green Ledger: Detailed table view of Scope 1-3 data with confidence filters. This mirrors the "csv" data structure.
+         5. Neural Insights: Visualization of Gemini AI performance (Flash vs Pro latency) and cost-benefit analysis (Unit Economics).
+         6. Audit Vault: Immutable log of XML generations and SHA-256 hashes.
+         
+         WHY: This structure prioritizes the "Financial Compliance" narrative. The Dashboard creates urgency (Liability), the Ledger provides proof (Data), and the AI section demonstrates ROI (Unit Economics).
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Financial Liability Trends:
+            - Goal: Inform CFO of tax risks.
+            - Viz: Chart.js Line Chart (Projected vs Actual).
+            - Interaction: Timeframe toggle.
+         2. Scope 1/2/3 Breakdown:
+            - Goal: Compare emission sources.
+            - Viz: Chart.js Doughnut Chart.
+            - Interaction: Click legend to filter ledger.
+         3. AI Latency & Performance (OTel Data):
+            - Goal: Relationships between Model Type and Latency.
+            - Viz: Plotly.js Scatter Plot.
+            - Interaction: Zoom/Pan.
+         4. Unit Economics (COGS vs Revenue):
+            - Goal: Inform on margin health.
+            - Viz: Chart.js Bar Chart.
+            - Justification: Clearly shows the profitability per verification.
+         5. Supply Chain Network:
+            - Goal: Organize Tier 1-3 suppliers.
+            - Viz: CSS Grid/Flex layout with connector lines (No SVG).
+            - Interaction: Hover for confidence score.
+         
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cyber: {
+                base: '#050505',
+                surface: 'rgba(255, 255, 255, 0.03)',
+                border: 'rgba(255, 255, 255, 0.08)',
+                text: '#94a3b8',
+                light: '#f8fafc',
+              },
+              neon: {
+                emerald: '#10b981',
+                blue: '#3b82f6',
+                rose: '#ef4444',
+                amber: '#f59e0b',
+              },
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            animation: {
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              flow: 'flow 2s linear infinite',
+            },
+            keyframes: {
+              flow: {
+                '0%': { backgroundPosition: '0% 50%' },
+                '100%': { backgroundPosition: '100% 50%' },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Custom Utilities */
+      body {
+        background-color: #050505;
+        color: #94a3b8;
+        overflow-x: hidden;
+      }
+
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .glass-panel:hover {
+        border-color: rgba(16, 185, 129, 0.2);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .chart-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        max-height: 400px;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+
+      .mono-num {
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        letter-spacing: -0.05em;
+      }
+
+      /* Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #050505;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1e293b;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #10b981;
+      }
+
+      /* Neural Loading State */
+      .neural-loader {
+        background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.2), transparent);
+        background-size: 200% 100%;
+        animation: flow 1.5s infinite linear;
+      }
+
+      .active-nav {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border-left: 3px solid #10b981;
+      }
+    </style>
+  </head>
+  <body class="flex h-screen antialiased selection:bg-neon-emerald selection:text-black">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside
+      class="w-20 lg:w-64 bg-black border-r border-cyber-border flex flex-col justify-between hidden md:flex transition-all duration-300 z-50"
+    >
+      <div>
+        <div class="h-20 flex items-center justify-center lg:justify-start lg:px-6 border-b border-cyber-border">
+          <div class="w-8 h-8 rounded bg-neon-emerald flex items-center justify-center text-black font-bold text-xl">
+            <i class="fa-solid fa-leaf"></i>
+          </div>
+          <span class="ml-3 font-bold text-white text-lg hidden lg:block tracking-tight"
+            >EcoTrack <span class="text-neon-emerald">Pro</span></span
+          >
+        </div>
+
+        <nav class="mt-8 flex flex-col gap-2 px-2">
+          <a
+            href="#"
+            onclick="switchTab('dashboard')"
+            id="nav-dashboard"
+            class="active-nav flex items-center p-3 rounded-lg hover:bg-cyber-surface hover:text-white transition-colors group"
+          >
+            <i class="fa-solid fa-chart-line w-6 text-center"></i>
+            <span class="ml-3 font-medium hidden lg:block">Command Center</span>
+          </a>
+          <a
+            href="#"
+            onclick="switchTab('ledger')"
+            id="nav-ledger"
+            class="flex items-center p-3 rounded-lg text-cyber-text hover:bg-cyber-surface hover:text-white transition-colors group"
+          >
+            <i class="fa-solid fa-table-list w-6 text-center"></i>
+            <span class="ml-3 font-medium hidden lg:block">Green Ledger</span>
+          </a>
+          <a
+            href="#"
+            onclick="switchTab('neural')"
+            id="nav-neural"
+            class="flex items-center p-3 rounded-lg text-cyber-text hover:bg-cyber-surface hover:text-white transition-colors group"
+          >
+            <i class="fa-solid fa-brain w-6 text-center"></i>
+            <span class="ml-3 font-medium hidden lg:block">Neural Insights</span>
+          </a>
+          <a
+            href="#"
+            onclick="switchTab('supply')"
+            id="nav-supply"
+            class="flex items-center p-3 rounded-lg text-cyber-text hover:bg-cyber-surface hover:text-white transition-colors group"
+          >
+            <i class="fa-solid fa-network-wired w-6 text-center"></i>
+            <span class="ml-3 font-medium hidden lg:block">Supply Chain</span>
+          </a>
+          <a
+            href="#"
+            onclick="switchTab('audit')"
+            id="nav-audit"
+            class="flex items-center p-3 rounded-lg text-cyber-text hover:bg-cyber-surface hover:text-white transition-colors group"
+          >
+            <i class="fa-solid fa-file-contract w-6 text-center"></i>
+            <span class="ml-3 font-medium hidden lg:block">Audit Vault</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="p-4 border-t border-cyber-border">
+        <div class="glass-panel p-4 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-neon-blue flex items-center justify-center text-white">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div class="hidden lg:block">
+            <div class="text-xs font-bold text-white">Admin User</div>
+            <div class="text-[10px] text-neon-emerald">SteelWorks GmbH</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+      <!-- HEADER -->
+      <header class="h-20 bg-cyber-base border-b border-cyber-border flex items-center justify-between px-8 z-40">
+        <div class="flex items-center gap-4">
+          <button class="md:hidden text-white text-xl"><i class="fa-solid fa-bars"></i></button>
+          <h2 class="text-xl font-bold text-white tracking-wide" id="page-title">Command Center</h2>
+          <span class="px-2 py-1 rounded bg-neon-emerald/10 text-neon-emerald text-[10px] font-bold border border-neon-emerald/20"
+            >LIVE: 2026-Q1</span
+          >
+        </div>
+
+        <div class="flex items-center gap-6">
+          <!-- Budget Monitor (Redis Mock) -->
+          <div class="hidden md:flex flex-col items-end">
+            <span class="text-[10px] uppercase font-bold text-cyber-text tracking-widest">Daily AI Budget</span>
+            <div class="flex items-center gap-2">
+              <span class="text-white font-mono text-sm">$42.50 / $50.00</span>
+              <div class="w-16 h-1.5 bg-cyber-surface rounded-full overflow-hidden">
+                <div class="h-full bg-neon-amber w-[85%]"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="h-8 w-[1px] bg-cyber-border mx-2"></div>
+
+          <button class="text-cyber-text hover:text-white transition-colors relative">
+            <i class="fa-solid fa-bell text-lg"></i>
+            <span class="absolute -top-1 -right-1 w-2 h-2 bg-neon-rose rounded-full animate-pulse"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE CONTENT -->
+      <div class="flex-1 overflow-y-auto p-4 lg:p-8 relative" id="main-scroll">
+        <!-- SECTION 1: DASHBOARD (Command Center) -->
+        <div id="view-dashboard" class="space-y-8 animate-in fade-in zoom-in duration-300">
+          <div class="max-w-6xl mx-auto">
+            <div class="mb-6">
+              <p class="text-sm text-cyber-text max-w-3xl leading-relaxed">
+                <strong class="text-white">Executive Summary:</strong> Overview of financial liability derived from CBAM exposure. Real-time
+                tracking of Scope 1, 2, and 3 emissions against the 2026 definitive phase thresholds. Alerts indicate a budget breach for
+                <em>tenant_steel_001</em>.
+              </p>
+            </div>
+
+            <!-- Top Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div class="glass-panel p-6 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-neon-emerald group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-money-bill-trend-up"></i>
+                </div>
+                <h3 class="text-xs font-bold text-cyber-text uppercase tracking-widest mb-2">Q1 CBAM Liability</h3>
+                <div class="text-3xl text-white mono-num mb-1">$12,450</div>
+                <div class="text-xs text-neon-emerald flex items-center gap-1">
+                  <i class="fa-solid fa-arrow-trend-down"></i> 4.2% vs Forecast
+                </div>
+              </div>
+
+              <div class="glass-panel p-6 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-neon-blue group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-database"></i>
+                </div>
+                <h3 class="text-xs font-bold text-cyber-text uppercase tracking-widest mb-2">Verified Records</h3>
+                <div class="text-3xl text-white mono-num mb-1">54,230</div>
+                <div class="text-xs text-neon-blue flex items-center gap-1"><i class="fa-solid fa-check-circle"></i> 100% ERP Sync</div>
+              </div>
+
+              <div class="glass-panel p-6 relative overflow-hidden group border border-neon-rose/30">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-neon-rose group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="text-xs font-bold text-cyber-text uppercase tracking-widest mb-2">Confidence Score</h3>
+                <div class="text-3xl text-white mono-num mb-1">88.4%</div>
+                <div class="text-xs text-neon-rose flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation"></i> Below 92% Target
+                </div>
+              </div>
+
+              <div class="glass-panel p-6 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-neon-amber group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <h3 class="text-xs font-bold text-cyber-text uppercase tracking-widest mb-2">AI Strategies</h3>
+                <div class="text-3xl text-white mono-num mb-1">14 Active</div>
+                <div class="text-xs text-neon-amber flex items-center gap-1"><i class="fa-solid fa-bolt"></i> Est. Savings: $4.5k</div>
+              </div>
+            </div>
+
+            <!-- Main Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div class="lg:col-span-2 glass-panel p-6">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-white font-bold">
+                    <i class="fa-solid fa-chart-area mr-2 text-neon-emerald"></i>Emission Trends vs Liability
+                  </h3>
+                  <select class="bg-black border border-cyber-border text-xs text-white rounded p-1">
+                    <option>Last 30 Days</option>
+                    <option>Last Quarter</option>
+                  </select>
+                </div>
+                <div class="chart-container">
+                  <canvas id="liabilityChart"></canvas>
+                </div>
+              </div>
+
+              <div class="lg:col-span-1 glass-panel p-6">
+                <h3 class="text-white font-bold mb-6"><i class="fa-solid fa-chart-pie mr-2 text-neon-blue"></i>Scope Distribution</h3>
+                <div class="chart-container" style="height: 250px">
+                  <canvas id="scopeChart"></canvas>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-4 text-center">
+                  <div class="bg-cyber-surface p-2 rounded">
+                    <div class="text-[10px] text-cyber-text uppercase">Direct (Scope 1)</div>
+                    <div class="text-lg text-white font-mono">450t</div>
+                  </div>
+                  <div class="bg-cyber-surface p-2 rounded">
+                    <div class="text-[10px] text-cyber-text uppercase">Indirect (Scope 2)</div>
+                    <div class="text-lg text-white font-mono">1,250t</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: THE GREEN LEDGER -->
+        <div id="view-ledger" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div class="max-w-6xl mx-auto">
+            <div class="mb-6 flex justify-between items-end">
+              <p class="text-sm text-cyber-text max-w-2xl">
+                <strong class="text-white">Audit Trail:</strong> Immutable record of all carbon-generating activities. Data is ingested via
+                ERP Connectors (SAP/NetSuite) and secured with Row-Level Security (RLS).
+              </p>
+              <button
+                class="bg-neon-emerald hover:bg-emerald-600 text-black font-bold py-2 px-4 rounded text-xs uppercase tracking-wider transition-all"
+              >
+                <i class="fa-solid fa-download mr-2"></i> Export XML
+              </button>
+            </div>
+
+            <div class="glass-panel overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="text-xs text-cyber-text uppercase bg-white/5 border-b border-cyber-border">
+                      <th class="p-4 font-bold">Trace ID</th>
+                      <th class="p-4 font-bold">Source</th>
+                      <th class="p-4 font-bold">Scope</th>
+                      <th class="p-4 font-bold text-right">Impact (kgCO2e)</th>
+                      <th class="p-4 font-bold text-center">Confidence</th>
+                      <th class="p-4 font-bold">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-sm text-white" id="ledger-body">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: NEURAL INSIGHTS -->
+        <div id="view-neural" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div class="max-w-6xl mx-auto">
+            <div class="mb-6">
+              <p class="text-sm text-cyber-text max-w-3xl">
+                <strong class="text-white">AI Analysis Engine:</strong> Powered by Gemini 2.5 Flash. Visualizes the cost-latency trade-off
+                (Unit Economics) and provides actionable reduction strategies protected by Resilience4j circuit breakers.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <!-- Unit Economics -->
+              <div class="glass-panel p-6">
+                <h3 class="text-white font-bold mb-4">Unit Economics (Cost per Calculation)</h3>
+                <div class="chart-container">
+                  <canvas id="unitEconomicsChart"></canvas>
+                </div>
+              </div>
+
+              <!-- OTel Trace Latency -->
+              <div class="glass-panel p-6">
+                <h3 class="text-white font-bold mb-4">Gemini Model Latency (Flash vs Pro)</h3>
+                <div id="latencyPlot" class="w-full h-[300px]"></div>
+              </div>
+            </div>
+
+            <!-- AI Action Card -->
+            <div class="glass-panel p-8 mt-8 border border-neon-blue/30 relative overflow-hidden">
+              <div class="absolute -right-10 -top-10 text-[150px] text-neon-blue opacity-5"><i class="fa-solid fa-microchip"></i></div>
+              <h3 class="text-xl font-bold text-white mb-4">Generate Reduction Strategy</h3>
+              <p class="text-cyber-text text-sm mb-6 max-w-xl">
+                Run a simulation on current Scope 2 spikes using historical grid intensity data. This operation consumes ~150 AI Tokens.
+              </p>
+
+              <button
+                onclick="runSimulation()"
+                id="btn-sim"
+                class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-3 px-6 rounded-lg text-sm uppercase tracking-wider transition-all flex items-center gap-2"
+              >
+                <i class="fa-solid fa-play"></i> Run Simulation
+              </button>
+
+              <div
+                id="sim-result"
+                class="hidden mt-6 p-4 bg-black/50 border border-cyber-border rounded-lg text-sm font-mono text-neon-emerald"
+              >
+                > ANALYZING LEDGER... DONE (120ms)<br />
+                > IDENTIFIED PEAK: HALL A (14:00 - 18:00)<br />
+                > RECOMMENDATION: SHIFT LOAD TO 22:00 (GRID INTENSITY -40%)<br />
+                > POTENTIAL SAVINGS: $450 / DAY
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: SUPPLY CHAIN -->
+        <div id="view-supply" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div class="max-w-6xl mx-auto">
+            <div class="mb-6">
+              <p class="text-sm text-cyber-text">
+                <strong class="text-white">Supply Chain Topology:</strong> Visualization of Tier 1-3 suppliers based on data confidence
+                tiers (Spend-based vs. Supplier-specific).
+              </p>
+            </div>
+
+            <div
+              class="glass-panel p-12 min-h-[500px] flex items-center justify-center relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
+            >
+              <!-- CSS Grid Topology Visualization -->
+              <div class="flex flex-col items-center gap-12 w-full max-w-4xl">
+                <!-- Tier 1 -->
+                <div class="flex gap-16">
+                  <div class="flex flex-col items-center group cursor-pointer">
+                    <div
+                      class="w-16 h-16 rounded-2xl bg-neon-emerald/20 border border-neon-emerald text-neon-emerald flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all group-hover:scale-110"
+                    >
+                      <i class="fa-solid fa-industry"></i>
+                    </div>
+                    <div class="mt-3 text-center">
+                      <div class="text-white font-bold text-sm">SteelWorks HQ</div>
+                      <div class="text-[10px] text-neon-emerald">Declarant (You)</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Connector -->
+                <div class="h-12 w-0.5 bg-cyber-border relative"></div>
+
+                <!-- Tier 2 -->
+                <div class="flex gap-24 relative">
+                  <div class="absolute top-[-24px] left-1/2 -translate-x-1/2 w-full h-[1px] bg-cyber-border max-w-[300px]"></div>
+
+                  <div class="flex flex-col items-center group cursor-pointer relative">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 h-6 w-0.5 bg-cyber-border"></div>
+                    <div
+                      class="w-12 h-12 rounded-xl bg-cyber-surface border border-cyber-border text-white flex items-center justify-center text-lg hover:border-neon-blue hover:text-neon-blue transition-all"
+                    >
+                      <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="mt-2 text-center">
+                      <div class="text-white font-bold text-xs">EuroPower Grid</div>
+                      <div class="text-[10px] text-cyber-text">Tier 1 (Scope 2)</div>
+                      <div class="mt-1 text-[9px] bg-neon-emerald/20 text-neon-emerald px-1 rounded">Conf: 0.98</div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col items-center group cursor-pointer relative">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 h-6 w-0.5 bg-cyber-border"></div>
+                    <div
+                      class="w-12 h-12 rounded-xl bg-cyber-surface border border-cyber-border text-white flex items-center justify-center text-lg hover:border-neon-rose hover:text-neon-rose transition-all"
+                    >
+                      <i class="fa-solid fa-truck"></i>
+                    </div>
+                    <div class="mt-2 text-center">
+                      <div class="text-white font-bold text-xs">Global Scraps</div>
+                      <div class="text-[10px] text-cyber-text">Tier 2 (Scope 3)</div>
+                      <div class="mt-1 text-[9px] bg-neon-rose/20 text-neon-rose px-1 rounded">Conf: 0.65</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5: AUDIT VAULT -->
+        <div id="view-audit" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div class="max-w-6xl mx-auto">
+            <div class="glass-panel p-8 text-center mb-8">
+              <i class="fa-solid fa-shield-halved text-6xl text-neon-emerald mb-4"></i>
+              <h2 class="text-2xl font-bold text-white mb-2">Immutable Integrity</h2>
+              <p class="text-sm text-cyber-text mb-6">Current Ledger Hash Verification</p>
+              <div class="inline-block bg-black p-4 rounded border border-cyber-border font-mono text-xs text-neon-emerald break-all">
+                sha256:7e8a9f0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
+              </div>
+              <div class="mt-4 text-[10px] text-cyber-text uppercase tracking-widest">Verified against PostgreSQL Audit Log</div>
+            </div>
+
+            <div class="glass-panel">
+              <div class="p-6 border-b border-cyber-border">
+                <h3 class="text-white font-bold">XML Generation History</h3>
+              </div>
+              <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between p-4 bg-cyber-surface rounded border border-cyber-border">
+                  <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-neon-emerald/20 text-neon-emerald rounded flex items-center justify-center">
+                      <i class="fa-solid fa-file-code"></i>
+                    </div>
+                    <div>
+                      <div class="text-white font-bold text-sm">cbam_export_tenant_steel_001.xml</div>
+                      <div class="text-[10px] text-cyber-text">Generated via GitHub Actions</div>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-white font-mono text-xs">2026-04-15 10:30 UTC</div>
+                    <div class="text-[10px] text-neon-emerald font-bold">VALIDATED (XSD)</div>
+                  </div>
+                </div>
+                <!-- More logs -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // --- DATA STATE ---
+      const ledgerData = [
+        { id: 'REC-001', source: 'Main Factory Grid Meter', scope: 'SCOPE_2', impact: 1250.5, conf: 0.98, status: 'VERIFIED' },
+        { id: 'REC-002', source: 'On-site Diesel Generator', scope: 'SCOPE_1', impact: 450.0, conf: 0.92, status: 'VERIFIED' },
+        { id: 'REC-003', source: 'Supply Chain - Global Scraps', scope: 'SCOPE_3', impact: 890.0, conf: 0.65, status: 'ESTIMATED' },
+        { id: 'REC-004', source: 'Last-mile Delivery', scope: 'SCOPE_3', impact: 120.0, conf: 0.88, status: 'PENDING' },
+      ];
+
+      // --- NAVIGATION ---
+      function switchTab(tabId) {
+        // Hide all views
+        ['dashboard', 'ledger', 'neural', 'supply', 'audit'].forEach(id => {
+          document.getElementById(`view-${id}`).classList.add('hidden');
+          document.getElementById(`nav-${id}`).classList.remove('active-nav');
+          document.getElementById(`nav-${id}`).classList.add('text-cyber-text');
+          document.getElementById(`nav-${id}`).querySelector('span').classList.remove('text-white');
+        });
+
+        // Show target
+        document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+        // Update Nav Style
+        const navItem = document.getElementById(`nav-${tabId}`);
+        navItem.classList.add('active-nav');
+        navItem.classList.remove('text-cyber-text');
+
+        // Update Title
+        const titles = {
+          dashboard: 'Command Center',
+          ledger: 'The Green Ledger',
+          neural: 'Neural Insights',
+          supply: 'Supply Chain Topology',
+          audit: 'Audit Vault',
+        };
+        document.getElementById('page-title').innerText = titles[tabId];
+      }
+
+      // --- CHART INITIALIZATION ---
+      function initCharts() {
+        // 1. Liability Chart (Line)
+        const ctxLiability = document.getElementById('liabilityChart').getContext('2d');
+        new Chart(ctxLiability, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [
+              {
+                label: 'Projected Liability ($)',
+                data: [10000, 11500, 12400, 13000, 13200, 12450],
+                borderColor: '#ef4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+              },
+              {
+                label: 'Optimized (AI) ($)',
+                data: [10000, 11000, 11200, 10500, 9800, 8500],
+                borderColor: '#10b981',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#94a3b8' } } },
+            scales: {
+              y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+              x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+            },
+          },
+        });
+
+        // 2. Scope Chart (Doughnut)
+        const ctxScope = document.getElementById('scopeChart').getContext('2d');
+        new Chart(ctxScope, {
+          type: 'doughnut',
+          data: {
+            labels: ['Scope 1', 'Scope 2', 'Scope 3'],
+            datasets: [
+              {
+                data: [450, 1250, 1010],
+                backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } },
+            cutout: '75%',
+          },
+        });
+
+        // 3. Unit Economics (Bar)
+        const ctxUnit = document.getElementById('unitEconomicsChart').getContext('2d');
+        new Chart(ctxUnit, {
+          type: 'bar',
+          data: {
+            labels: ['Ledger Entry', 'AI Strategy', 'CBAM Report'],
+            datasets: [
+              {
+                label: 'Cost ($)',
+                data: [0.05, 2.0, 150.0],
+                backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                borderRadius: 4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+              x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+              y: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+            },
+            plugins: { legend: { display: false } },
+          },
+        });
+
+        // 4. Latency Plot (Plotly)
+        const traceFlash = {
+          x: Array.from({ length: 20 }, (_, i) => i),
+          y: Array.from({ length: 20 }, () => 200 + Math.random() * 50),
+          mode: 'markers',
+          type: 'scatter',
+          name: 'Gemini Flash',
+          marker: { color: '#10b981' },
+        };
+        const tracePro = {
+          x: Array.from({ length: 20 }, (_, i) => i),
+          y: Array.from({ length: 20 }, () => 1200 + Math.random() * 200),
+          mode: 'markers',
+          type: 'scatter',
+          name: 'Gemini Pro',
+          marker: { color: '#3b82f6', symbol: 'diamond' },
+        };
+        const layout = {
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)',
+          font: { color: '#94a3b8' },
+          xaxis: { showgrid: false, title: 'Request Stream' },
+          yaxis: { gridcolor: '#334155', title: 'Latency (ms)' },
+          margin: { t: 20, l: 40, r: 20, b: 40 },
+          legend: { orientation: 'h', y: 1.1 },
+        };
+        Plotly.newPlot('latencyPlot', [traceFlash, tracePro], layout, { displayModeBar: false, responsive: true });
+      }
+
+      // --- LEDGER POPULATION ---
+      function renderLedger() {
+        const tbody = document.getElementById('ledger-body');
+        tbody.innerHTML = ledgerData
+          .map(
+            row => `
+                <tr class="border-b border-cyber-border hover:bg-white/5 transition-colors group">
+                    <td class="p-4 font-mono text-xs text-cyber-text">${row.id}</td>
+                    <td class="p-4 font-medium">${row.source}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded text-[10px] font-bold ${getScopeColor(row.scope)}">${row.scope.replace(
+                      '_',
+                      ' ',
+                    )}</span></td>
+                    <td class="p-4 text-right font-mono text-neon-emerald">${row.impact.toLocaleString()}</td>
+                    <td class="p-4 text-center">
+                        <div class="w-full bg-cyber-surface h-1.5 rounded-full overflow-hidden">
+                            <div class="h-full ${row.conf > 0.9 ? 'bg-neon-emerald' : 'bg-neon-amber'}" style="width: ${
+                              row.conf * 100
+                            }%"></div>
+                        </div>
+                        <span class="text-[10px] text-cyber-text">${(row.conf * 100).toFixed(0)}%</span>
+                    </td>
+                    <td class="p-4 text-xs font-bold ${row.status === 'VERIFIED' ? 'text-neon-emerald' : 'text-neon-amber'}">${
+                      row.status
+                    }</td>
+                </tr>
+            `,
+          )
+          .join('');
+      }
+
+      function getScopeColor(scope) {
+        if (scope === 'SCOPE_1') return 'bg-neon-blue/10 text-neon-blue border border-neon-blue/20';
+        if (scope === 'SCOPE_2') return 'bg-neon-emerald/10 text-neon-emerald border border-neon-emerald/20';
+        return 'bg-neon-amber/10 text-neon-amber border border-neon-amber/20';
+      }
+
+      // --- SIMULATION LOGIC ---
+      function runSimulation() {
+        const btn = document.getElementById('btn-sim');
+        const result = document.getElementById('sim-result');
+
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing Neural Pipeline...';
+        btn.classList.add('neural-loader');
+
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-solid fa-play"></i> Run Simulation';
+          btn.classList.remove('neural-loader');
+          result.classList.remove('hidden');
+          result.classList.add('animate-in', 'fade-in');
+        }, 2000);
+      }
+
+      // --- INIT ---
+      window.addEventListener('DOMContentLoaded', () => {
+        initCharts();
+        renderLedger();
+      });
+    </script>
+  </body>
+</html>

@@ -58,26 +58,26 @@
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="ecoTrackProApp.emissionRecord.dateRecorded" for="field_dateRecorded">Date Recorded</label>
-          <div class="input-group">
-            <input
-              id="field_dateRecorded"
-              data-cy="dateRecorded"
-              type="text"
-              class="form-control"
-              name="dateRecorded"
-              ngbDatepicker
-              #dateRecordedDp="ngbDatepicker"
-              formControlName="dateRecorded"
-            />
-            <button type="button" class="btn btn-secondary" (click)="dateRecordedDp.toggle()">
-              <fa-icon icon="calendar-alt"></fa-icon>
-            </button>
-          </div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" formControlName="dateRecorded" id="field_dateRecorded" data-cy="dateRecorded" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
         </div>
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="ecoTrackProApp.emissionRecord.source" for="field_source">Source</label>
           <input type="text" class="form-control" name="source" id="field_source" data-cy="source" formControlName="source" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="ecoTrackProApp.emissionRecord.notes" for="field_notes">Notes</label>
+          <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="ecoTrackProApp.emissionRecord.verified" for="field_verified">Verified</label>
+          <input type="checkbox" class="form-check" name="verified" id="field_verified" data-cy="verified" formControlName="verified" />
         </div>
 
         <div class="mb-3">

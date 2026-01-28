@@ -1,8 +1,10 @@
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
 import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
@@ -30,6 +32,7 @@ import { EmissionRecordDeleteDialogComponent } from '../delete/emission-record-d
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
     ItemCountComponent,
+    MatPaginatorModule,
   ],
 })
 export class EmissionRecordComponent implements OnInit {
@@ -41,13 +44,13 @@ export class EmissionRecordComponent implements OnInit {
 
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
-  page = 1;
+  page = 0;
 
   constructor(
     protected emissionRecordService: EmissionRecordService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
-    protected modalService: NgbModal,
+    protected dialog: MatDialog,
   ) {}
 
   trackId = (_index: number, item: IEmissionRecord): number => this.emissionRecordService.getEmissionRecordIdentifier(item);
@@ -57,10 +60,9 @@ export class EmissionRecordComponent implements OnInit {
   }
 
   delete(emissionRecord: IEmissionRecord): void {
-    const modalRef = this.modalService.open(EmissionRecordDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.emissionRecord = emissionRecord;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed
+    const modalRef = this.dialog.open(EmissionRecordDeleteDialogComponent, { data: { emissionRecord } });
+    modalRef
+      .afterClosed()
       .pipe(
         filter(reason => reason === ITEM_DELETED_EVENT),
         switchMap(() => this.loadFromBackendWithRouteInformations()),
@@ -84,8 +86,10 @@ export class EmissionRecordComponent implements OnInit {
     this.handleNavigation(this.page, this.predicate, this.ascending);
   }
 
-  navigateToPage(page = this.page): void {
-    this.handleNavigation(page, this.predicate, this.ascending);
+  navigateToPage(event: PageEvent): void {
+    this.page = event.pageIndex;
+    this.itemsPerPage = event.pageSize;
+    this.handleNavigation(this.page, this.predicate, this.ascending);
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
@@ -97,7 +101,7 @@ export class EmissionRecordComponent implements OnInit {
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
     const page = params.get(PAGE_HEADER);
-    this.page = +(page ?? 1);
+    this.page = +(page ?? 1) - 1;
     const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
     this.predicate = sort[0];
     this.ascending = sort[1] === ASC;
@@ -119,9 +123,9 @@ export class EmissionRecordComponent implements OnInit {
 
   protected queryBackend(page?: number, predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
     this.isLoading = true;
-    const pageToLoad: number = page ?? 1;
+    const pageToLoad: number = page ?? 0;
     const queryObject: any = {
-      page: pageToLoad - 1,
+      page: pageToLoad,
       size: this.itemsPerPage,
       eagerload: true,
       sort: this.getSortQueryParam(predicate, ascending),
@@ -131,7 +135,7 @@ export class EmissionRecordComponent implements OnInit {
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
     const queryParamsObj = {
-      page,
+      page: page + 1,
       size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
     };

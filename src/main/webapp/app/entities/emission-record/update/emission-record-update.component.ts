@@ -1,3 +1,7 @@
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
@@ -18,7 +22,7 @@ import { EmissionRecordFormService, EmissionRecordFormGroup } from './emission-r
   standalone: true,
   selector: 'jhi-emission-record-update',
   templateUrl: './emission-record-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule],
 })
 export class EmissionRecordUpdateComponent implements OnInit {
   isSaving = false;

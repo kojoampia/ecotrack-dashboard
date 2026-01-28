@@ -1,6 +1,6 @@
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { HealthService } from './health.service';
@@ -11,13 +11,13 @@ import HealthModalComponent from './modal/health-modal.component';
   standalone: true,
   selector: 'jhi-health',
   templateUrl: './health.component.html',
-  imports: [SharedModule, HealthModalComponent],
+  imports: [SharedModule, HealthModalComponent, MatDialogModule],
 })
 export default class HealthComponent implements OnInit {
   health?: Health;
 
   constructor(
-    private modalService: NgbModal,
+    private dialog: MatDialog,
     private healthService: HealthService,
   ) {}
 
@@ -44,7 +44,6 @@ export default class HealthComponent implements OnInit {
   }
 
   showHealth(health: { key: string; value: HealthDetails }): void {
-    const modalRef = this.modalService.open(HealthModalComponent);
-    modalRef.componentInstance.health = health;
+    this.dialog.open(HealthModalComponent, { data: { health } });
   }
 }

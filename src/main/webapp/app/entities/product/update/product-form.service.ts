@@ -19,22 +19,27 @@ type ProductFormGroupInput = IProduct | PartialWithRequiredKeyOf<NewProduct>;
 /**
  * Type that converts some properties for forms.
  */
-type FormValueOf<T extends IProduct | NewProduct> = Omit<T, 'createdDate'> & {
+type FormValueOf<T extends IProduct | NewProduct> = Omit<T, 'createdDate' | 'lastModifiedDate'> & {
   createdDate?: string | null;
+  lastModifiedDate?: string | null;
 };
 
 type ProductFormRawValue = FormValueOf<IProduct>;
 
 type NewProductFormRawValue = FormValueOf<NewProduct>;
 
-type ProductFormDefaults = Pick<NewProduct, 'id' | 'createdDate'>;
+type ProductFormDefaults = Pick<NewProduct, 'id' | 'createdDate' | 'lastModifiedDate'>;
 
 type ProductFormGroupContent = {
   id: FormControl<ProductFormRawValue['id'] | NewProduct['id']>;
   name: FormControl<ProductFormRawValue['name']>;
   sku: FormControl<ProductFormRawValue['sku']>;
   description: FormControl<ProductFormRawValue['description']>;
+  category: FormControl<ProductFormRawValue['category']>;
+  unitOfMeasure: FormControl<ProductFormRawValue['unitOfMeasure']>;
+  totalCarbonFootprint: FormControl<ProductFormRawValue['totalCarbonFootprint']>;
   createdDate: FormControl<ProductFormRawValue['createdDate']>;
+  lastModifiedDate: FormControl<ProductFormRawValue['lastModifiedDate']>;
   supplier: FormControl<ProductFormRawValue['supplier']>;
 };
 
@@ -62,7 +67,11 @@ export class ProductFormService {
         validators: [Validators.required],
       }),
       description: new FormControl(productRawValue.description),
+      category: new FormControl(productRawValue.category),
+      unitOfMeasure: new FormControl(productRawValue.unitOfMeasure),
+      totalCarbonFootprint: new FormControl(productRawValue.totalCarbonFootprint),
       createdDate: new FormControl(productRawValue.createdDate),
+      lastModifiedDate: new FormControl(productRawValue.lastModifiedDate),
       supplier: new FormControl(productRawValue.supplier),
     });
   }
@@ -87,6 +96,7 @@ export class ProductFormService {
     return {
       id: null,
       createdDate: currentTime,
+      lastModifiedDate: currentTime,
     };
   }
 
@@ -94,6 +104,7 @@ export class ProductFormService {
     return {
       ...rawProduct,
       createdDate: dayjs(rawProduct.createdDate, DATE_TIME_FORMAT),
+      lastModifiedDate: dayjs(rawProduct.lastModifiedDate, DATE_TIME_FORMAT),
     };
   }
 
@@ -103,6 +114,7 @@ export class ProductFormService {
     return {
       ...product,
       createdDate: product.createdDate ? product.createdDate.format(DATE_TIME_FORMAT) : undefined,
+      lastModifiedDate: product.lastModifiedDate ? product.lastModifiedDate.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }

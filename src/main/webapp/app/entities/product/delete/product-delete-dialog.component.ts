@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
@@ -10,23 +11,26 @@ import { ProductService } from '../service/product.service';
 @Component({
   standalone: true,
   templateUrl: './product-delete-dialog.component.html',
-  imports: [SharedModule, FormsModule],
+  imports: [SharedModule, FormsModule, MatDialogModule, MatButtonModule],
 })
 export class ProductDeleteDialogComponent {
   product?: IProduct;
 
   constructor(
     protected productService: ProductService,
-    protected activeModal: NgbActiveModal,
-  ) {}
+    public dialogRef: MatDialogRef<ProductDeleteDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { product: IProduct },
+  ) {
+    this.product = data.product;
+  }
 
   cancel(): void {
-    this.activeModal.dismiss();
+    this.dialogRef.close();
   }
 
   confirmDelete(id: number): void {
     this.productService.delete(id).subscribe(() => {
-      this.activeModal.close(ITEM_DELETED_EVENT);
+      this.dialogRef.close(ITEM_DELETED_EVENT);
     });
   }
 }

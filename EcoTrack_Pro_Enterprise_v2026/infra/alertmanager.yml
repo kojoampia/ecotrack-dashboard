@@ -1,0 +1,46 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'compliance-alerts@ecotrackpro.com'
+  smtp_auth_username: 'alerts@ecotrackpro.com'
+  smtp_auth_password: 'your-app-password'
+  smtp_require_tls: true
+
+route:
+  group_by: ['alertname', 'tenant_id']
+  group_wait: 10s
+  group_interval: 5m
+  repeat_interval: 3h
+  receiver: 'default-receiver'
+  routes:
+    # Route infrastructure outages
+    - match:
+        severity: critical
+        domain: infrastructure
+      receiver: 'ops-team'
+
+    # NEW: Route budget breaches to the Financial Compliance team
+    - match:
+        alertname: CarbonBudgetBreach
+      receiver: 'finance-team'
+
+receivers:
+  - name: 'default-receiver'
+    email_configs:
+      - to: 'admin@ecotrackpro.com'
+
+  - name: 'ops-team'
+    email_configs:
+      - to: 'oncall@ecotrackpro.com'
+        send_resolved: true
+
+  - name: 'finance-team'
+    email_configs:
+      - to: 'billing@ecotrackpro.com'
+        send_resolved: false
+        headers:
+          Subject: '💰 FINANCIAL ALERT: Budget Exceeded for Tenant {{ .CommonLabels.tenant_id }}'
+        html: |
+          <h2>Carbon Credit Limit Reached</h2>
+          <p>Tenant <strong>{{ .CommonLabels.tenant_id }}</strong> has consumed their allocated AI budget for the day.</p>
+          <p><strong>Action required:</strong> Upgrade subscription tier or wait for the daily reset at 00:00 UTC.</p>

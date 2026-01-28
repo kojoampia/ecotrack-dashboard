@@ -1,3 +1,4 @@
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Component, Input } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
@@ -7,7 +8,7 @@ import { GarbageCollector } from 'app/admin/metrics/metrics.model';
   standalone: true,
   selector: 'jhi-metrics-garbagecollector',
   templateUrl: './metrics-garbagecollector.component.html',
-  imports: [SharedModule],
+  imports: [SharedModule, MatProgressBarModule],
 })
 export class MetricsGarbageCollectorComponent {
   /**

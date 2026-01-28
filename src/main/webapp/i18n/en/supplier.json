@@ -22,6 +22,9 @@
       "contactEmail": "Contact Email",
       "industry": "Industry",
       "tier": "Tier",
+      "address": "Address",
+      "phone": "Phone",
+      "website": "Website",
       "product": "Product"
     }
   }

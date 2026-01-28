@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+<changeSet id="demo-data-001" author="ExpertJavaCoder">
+    <loadData tableName="jhi_user" file="data/users.csv" separator=","/>
+    <loadData tableName="supplier" file="data/suppliers.csv" separator=","/>
+    <loadData tableName="product" file="data/products.csv" separator=","/>
+    <loadData tableName="sensor" file="data/sensors.csv" separator=","/>
+    <loadData tableName="emission_record" file="data/emission_records.csv" separator=","/>
+    <loadData tableName="audit_log" file="data/audit_logs.csv" separator=","/>
+</changeSet>
+
+</databaseChangeLog>

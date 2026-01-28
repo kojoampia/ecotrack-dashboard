@@ -40,10 +40,22 @@ public class Supplier implements Serializable {
     @Column(name = "tier")
     private Integer tier;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "website")
+    private String website;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "supplier")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "emissionRecords", "supplier" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "emissionRecords", "passports", "supplier" }, allowSetters = true)
     private Set<Product> products = new HashSet<>();
+
+    @Column(name = "tenant_id", nullable = false)
+    private String tenantId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -112,6 +124,45 @@ public class Supplier implements Serializable {
         this.tier = tier;
     }
 
+    public String getAddress() {
+        return this.address;
+    }
+
+    public Supplier address(String address) {
+        this.setAddress(address);
+        return this;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public Supplier phone(String phone) {
+        this.setPhone(phone);
+        return this;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWebsite() {
+        return this.website;
+    }
+
+    public Supplier website(String website) {
+        this.setWebsite(website);
+        return this;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     public Set<Product> getProducts() {
         return this.products;
     }
@@ -143,6 +194,19 @@ public class Supplier implements Serializable {
         return this;
     }
 
+    public String getTenantId() {
+        return this.tenantId;
+    }
+
+    public Supplier tenantId(String tenantId) {
+        this.setTenantId(tenantId);
+        return this;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -171,6 +235,10 @@ public class Supplier implements Serializable {
             ", contactEmail='" + getContactEmail() + "'" +
             ", industry='" + getIndustry() + "'" +
             ", tier=" + getTier() +
+            ", address='" + getAddress() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", website='" + getWebsite() + "'" +
+            ", tenantId='" + getTenantId() + "'" +
             "}";
     }
 }

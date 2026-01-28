@@ -30,6 +30,14 @@
         <dd>
           <span>{{ emissionRecord.source }}</span>
         </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.emissionRecord.notes">Notes</span></dt>
+        <dd>
+          <span>{{ emissionRecord.notes }}</span>
+        </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.emissionRecord.verified">Verified</span></dt>
+        <dd>
+          <span>{{ emissionRecord.verified }}</span>
+        </dd>
         <dt><span jhiTranslate="ecoTrackProApp.emissionRecord.product">Product</span></dt>
         <dd>
           <div *ngIf="emissionRecord.product">

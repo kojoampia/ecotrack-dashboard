@@ -26,9 +26,25 @@
         <dd>
           <span>{{ product.description }}</span>
         </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.product.category">Category</span></dt>
+        <dd>
+          <span>{{ product.category }}</span>
+        </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.product.unitOfMeasure">Unit Of Measure</span></dt>
+        <dd>
+          <span>{{ product.unitOfMeasure }}</span>
+        </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.product.totalCarbonFootprint">Total Carbon Footprint</span></dt>
+        <dd>
+          <span>{{ product.totalCarbonFootprint }}</span>
+        </dd>
         <dt><span jhiTranslate="ecoTrackProApp.product.createdDate">Created Date</span></dt>
         <dd>
           <span>{{ product.createdDate | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="ecoTrackProApp.product.lastModifiedDate">Last Modified Date</span></dt>
+        <dd>
+          <span>{{ product.lastModifiedDate | formatMediumDatetime }}</span>
         </dd>
         <dt><span jhiTranslate="ecoTrackProApp.product.supplier">Supplier</span></dt>
         <dd>

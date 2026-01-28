@@ -24,6 +24,9 @@ describe('Supplier Form Service', () => {
             contactEmail: expect.any(Object),
             industry: expect.any(Object),
             tier: expect.any(Object),
+            address: expect.any(Object),
+            phone: expect.any(Object),
+            website: expect.any(Object),
           }),
         );
       });
@@ -38,6 +41,9 @@ describe('Supplier Form Service', () => {
             contactEmail: expect.any(Object),
             industry: expect.any(Object),
             tier: expect.any(Object),
+            address: expect.any(Object),
+            phone: expect.any(Object),
+            website: expect.any(Object),
           }),
         );
       });

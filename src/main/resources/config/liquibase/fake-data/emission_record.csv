@@ -1,11 +1,11 @@
-id;scope;carbon_grams;date_recorded;source
-1;SCOPE_1;20683;2026-01-05;frugal brr coconut
-2;SCOPE_2;26768;2026-01-05;recklessly
-3;SCOPE_2;12042;2026-01-04;politely before over
-4;SCOPE_3;26879;2026-01-05;lightly
-5;SCOPE_3;21569;2026-01-05;pfft airmail
-6;SCOPE_1;21181;2026-01-05;concerning listen
-7;SCOPE_1;4210;2026-01-05;past
-8;SCOPE_2;22322;2026-01-05;jackal
-9;SCOPE_2;28351;2026-01-05;tan before scent
-10;SCOPE_2;15746;2026-01-05;boohoo
+id;scope;carbon_grams;date_recorded;source;notes;verified
+1;SCOPE_1;20683;2026-01-05;frugal brr coconut;switch qua;false
+2;SCOPE_3;25556;2026-01-05;leopard;hypothermia wetly opposite;false
+3;SCOPE_2;30718;2026-01-05;entity and;concerning listen;true
+4;SCOPE_1;13293;2026-01-05;neutralize yowza duh;scented incidentally bah;true
+5;SCOPE_2;7825;2026-01-05;positively diligently;cheerfully lyocell finally;false
+6;SCOPE_3;2195;2026-01-05;abaft bah cassock;tattler blah;true
+7;SCOPE_3;14246;2026-01-05;lest above meanwhile;rapidly positive willfully;false
+8;SCOPE_2;18176;2026-01-05;alongside if thrift;excursion academic;true
+9;SCOPE_1;12106;2026-01-05;sieve flash;gorgeous tyrannise;true
+10;SCOPE_3;22980;2026-01-05;yuck patiently pointed;boo;true
