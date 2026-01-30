@@ -1,4 +1,0 @@
-id,name,sku,description,supplier_id,tenant_id,created_date
-1,Industrial H-Beam,ST-H-001,High-strength construction steel,2,tenant_steel_001,2026-01-01T10:00:00Z
-2,Recycled Sheet Metal,ST-RS-99,Low-carbon alternative sheet,2,tenant_steel_001,2026-01-05T14:30:00Z
-3,Biodegradable Mailer,GP-BM-01,Corn-starch based packaging,4,tenant_green_002,2026-01-10T09:00:00Z

@@ -1,0 +1,28 @@
+<div class="sidebar">
+    <button type="button" class="close round-btn float-left bg-amen-green" aria-label="close" [hidden]="!isHideSidebar" (click)="toggleHideSidebar()">
+        <span aria-hidden="true"><i class="arrow right"></i></span>
+    </button>
+    <div class="card border-0" *ngIf="!isHideSidebar" [ngClass]="{'sidebar-open':!isHideSidebar, 'sidebar-collapsed': isHideSidebar}">
+        <div class="card-header header  bg-amen-green" [ngClass]="{'header-up': !isSidebarCollapsed, 'header-down': isSidebarCollapsed}" *ngIf="title">
+            <div class="row-fluid" id="headerTitlePanel">
+                <button type="button" class="close round-btn float-left bg-amen-green" aria-label="close" [hidden]="isHideSidebar" (click)="toggleHideSidebar()">
+                    <span aria-hidden="true"><i class="arrow left"></i></span>
+                </button>
+                <button type="button" class="close round-btn float-right bg-amen-green" aria-label="Close" [hidden]="isSidebarCollapsed" (click)="toggleSidebarCollapse()">
+                    <span aria-hidden="true"><i class="arrow up"></i></span>
+                </button>
+                <button type="button" class="close round-btn float-right bg-amen-green" aria-label="Close" [hidden]="!isSidebarCollapsed" (click)="toggleSidebarCollapse()">
+                    <span aria-hidden="true"><i class="arrow down"></i></span>
+                </button>
+                <h4 class="text-center text-white" *ngIf="title">
+                    <span>{{title}}</span>
+                </h4>
+            </div>
+        </div>
+        <div class="card-body border-1 border-primary bg-white" [hidden]="isSidebarCollapsed">
+            <ul class="list-group list-group-flush" *ngIf="sidebarItems && sidebarItems.length > 0">
+                <eco-menu *ngFor="let item of sidebarItems" [menuItem]="item" (menuSelected)="onMenuItemSelected($event)"></eco-menu>
+            </ul>
+        </div>
+    </div>
+</div>

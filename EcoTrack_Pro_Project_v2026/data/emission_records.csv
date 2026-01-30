@@ -1,6 +1,0 @@
-id,scope,carbon_grams,date_recorded,source,confidence_score,product_id,tenant_id
-1,SCOPE_2,1250500,2026-01-15,Main Factory Grid Meter,0.98,1,tenant_steel_001
-2,SCOPE_1,450000,2026-01-16,On-site Diesel Generator,0.92,1,tenant_steel_001
-3,SCOPE_3,890000,2026-01-18,Supply Chain - Global Steel Scraps,0.65,1,tenant_steel_001
-4,SCOPE_3,120000,2026-01-20,Last-mile Delivery - EcoTrucking,0.88,3,tenant_green_002
-5,SCOPE_2,45000,2026-01-21,Office HQ Electricity,0.95,3,tenant_green_002

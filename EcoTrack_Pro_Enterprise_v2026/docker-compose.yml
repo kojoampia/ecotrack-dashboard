@@ -1,9 +1,0 @@
-version: '3.8'
-services:
-  backend: { build: . }
-  redis: { image: redis:alpine }
-  otel-collector: { image: otel/opentelemetry-collector-contrib }
-  prometheus: { image: prom/prometheus }
-  loki: { image: grafana/loki }
-  tempo: { image: grafana/tempo }
-  grafana: { image: grafana/grafana }

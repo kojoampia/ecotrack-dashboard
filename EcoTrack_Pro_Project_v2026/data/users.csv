@@ -1,4 +1,0 @@
-id,login,password_hash,first_name,last_name,email,activated,lang_key,created_by,tenant_id
-1,admin_steel,$2a$10$gSAhZJJ.aPZUXWJLjtt3E.z7z.5shPSatWfXm7S9.lK.5K5K5K5K,Otto,Eisenberg,admin@steelworks.at,true,en,system,tenant_steel_001
-2,cfo_green,$2a$10$gSAhZJJ.aPZUXWJLjtt3E.z7z.5shPSatWfXm7S9.lK.5K5K5K5K,Sarah,Eco,cfo@greenpack.io,true,en,system,tenant_green_002
-3,auditor_ext,$2a$10$gSAhZJJ.aPZUXWJLjtt3E.z7z.5shPSatWfXm7S9.lK.5K5K5K5K,Frank,Verify,frank@tuv-nord.de,true,en,system,tenant_steel_001

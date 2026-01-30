@@ -64,7 +64,7 @@
     "webapp:test": "npm run test --"
   },
   "config": {
-    "backend_port": 8080,
+    "backend_port": 8081,
     "default_environment": "prod",
     "packaging": "jar"
   },
@@ -74,23 +74,21 @@
     "@angular/cli": "16.2.11",
     "@angular/common": "16.2.11",
     "@angular/compiler": "16.2.11",
-    "@angular/core": "16.2.11"
+    "@angular/core": "16.2.11",
+    "@angular/material": "16.2.11"
   },
   "dependencies": {
     "@angular/animations": "^16.2.11",
-    "@angular/cdk": "^15.2.9",
+    "@angular/cdk": "^16.2.11",
     "@angular/common": "16.2.11",
     "@angular/compiler": "16.2.11",
     "@angular/core": "16.2.11",
     "@angular/forms": "16.2.11",
     "@angular/localize": "16.2.11",
-    "@angular/material": "^15.2.9",
+    "@angular/material": "^16.2.11",
     "@angular/platform-browser": "16.2.11",
     "@angular/platform-browser-dynamic": "16.2.11",
     "@angular/router": "16.2.11",
-    "@fortawesome/angular-fontawesome": "0.13.0",
-    "@fortawesome/fontawesome-svg-core": "6.4.2",
-    "@fortawesome/free-solid-svg-icons": "6.4.2",
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@popperjs/core": "2.11.8",

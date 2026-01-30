@@ -1,0 +1,7 @@
+{
+  "*": {
+    "target": "https://api-eco-admin.jojoaddison.net",
+    "secure": false,
+    "loglevel": "debug"
+  }
+}

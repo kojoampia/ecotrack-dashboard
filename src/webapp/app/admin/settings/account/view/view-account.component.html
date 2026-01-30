@@ -1,0 +1,33 @@
+<h2 jhiTranslate="settings.account.main">Account</h2>
+<ngx-avatar></ngx-avatar>
+<ngx-avatar [value]="profileImageUrl || null"
+            [size]="100"
+            [src]="defaultUserImage">
+</ngx-avatar>
+<mat-list>
+    <mat-list-item>
+        <h3 mat-line jhiTranslate="settings.form.email">Email</h3>
+        <div mat-line> {{(account$ | async)?.email}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <h3 mat-line jhiTranslate="settings.form.firstname">First names</h3>
+        <div mat-line> {{(account$ | async)?.firstName}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <h3 mat-line jhiTranslate="settings.form.lastname">Last name</h3>
+        <div mat-line> {{(account$ | async)?.lastName}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <h3 mat-line jhiTranslate="settings.form.profiles">Authorities</h3>
+        <div mat-line> {{(account$ | async)?.authorities}} </div>
+    </mat-list-item>
+    <mat-list-item>
+        <h3 mat-line jhiTranslate="settings.form.language">Language</h3>
+        <div mat-line> {{(account$ | async)?.langKey}} </div>
+    </mat-list-item>
+</mat-list>
+<div class="mv-2">
+    <button mat-raised-button routerLink="edit" type="button" color="primary">
+        <span jhiTranslate="shared.button.edit">Edit</span>
+    </button>
+</div>

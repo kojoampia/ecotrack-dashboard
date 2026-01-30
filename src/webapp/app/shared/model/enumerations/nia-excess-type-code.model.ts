@@ -1,0 +1,9 @@
+export enum NiaExcessTypeCode {
+  EXCESS_IS_APPLICABLE = 'EIA',
+
+  EXCESS_IS_BOUGHT = 'EIB',
+
+  VOLUNTARY_EXCESS_IS_TAKEN = 'VET',
+
+  EXCESS_IS_NOT_APPLICABLE = 'ENA',
+}

@@ -1,0 +1,38 @@
+<mat-card class="app-modal-form">
+    <mat-card-content>
+        <div class="d-flex justify-content-center">
+            <h2>{{'auth.login.title'|translate}}</h2>
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="d-flex flex-sm-column">
+                <mat-form-field appearance="outline">
+                    <mat-label>{{'auth.login.email.label'|translate}}</mat-label>
+                    <mat-icon matPrefix>email</mat-icon>
+                    <input type="text" placeholder="Enter email" matInput formControlName="email"/>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>{{'auth.login.password.label'|translate}}</mat-label>
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <input [type]="hide ? 'password': 'text'"
+                           placeholder="Enter password" matInput formControlName="password">
+                    <button mat-icon-button matSuffix (click)="hide = !hide" type="button">
+                        <mat-icon>
+                            {{hide ? 'visibility' : 'visibility_off'}}
+                        </mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <div class="p-2 text-right">
+                    <a routerLink="/auth/forgot-password">{{'auth.login.forgotPassword'|translate}}</a>
+                </div>
+
+                <div class="p-2">
+                    <button class="w-100" type="submit" mat-raised-button color="primary"
+                            [disabled]="loginForm.invalid">
+                        {{'shared.button.submit'|translate}}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

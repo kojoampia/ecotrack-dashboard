@@ -1,0 +1,27 @@
+<div class="d-flex flex-column h-100">
+    <div class="d-flex justify-content-end p-3">
+        <eco-language-menu></eco-language-menu>
+    </div>
+    <div class="d-flex justify-content-center h-100">
+        <div class="d-flex align-self-center">
+            <mat-card>
+                <mat-card-title>
+                    <h2 jhiTranslate="activate.title">Activation</h2>
+                </mat-card-title>
+                <mat-card-content>
+                    <div class="alert alert-success" *ngIf="success">
+                    <span
+                        jhiTranslate="activate.messages.success"><strong>Your user account has been activated.</strong> Please </span>
+                        <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">
+                            sign in
+                        </a>.
+                    </div>
+
+                    <div class="alert alert-danger" *ngIf="error" jhiTranslate="activate.messages.error">
+                        <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

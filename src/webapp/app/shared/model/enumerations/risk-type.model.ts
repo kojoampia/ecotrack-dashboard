@@ -1,0 +1,11 @@
+export enum RiskType {
+  X1_PRIVATE = 'X1_PRIVATE',
+
+  X4_PRIVATE_CORPORATE = 'X4_PRIVATE_CORPORATE',
+
+  TAXI = 'TAXI',
+
+  HIRING_CARS = 'HIRING_CARS',
+
+  BUS = 'BUS',
+}

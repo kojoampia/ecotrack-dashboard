@@ -1,0 +1,46 @@
+
+<div class="table-responsive border border-primary" id="entities" *ngIf="businessDetail">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.attribute">Attribute</span></th>
+          <th scope="col"><span jhiTranslate="global.field.values">Values</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {{ 'jacApp.quote.application.businessName' | translate }}
+          </td>
+          <td>
+              {{businessDetail.businessName}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{ 'jacApp.quote.application.address' | translate }}
+          </td>
+          <td>
+              {{businessDetail.address}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+              {{ 'jacApp.quote.application.email' | translate }}
+          </td>
+          <td>
+              {{ businessDetail.email }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+              {{ 'jacApp.quote.application.phonenumber' | translate }}
+          </td>
+          <td>
+              {{ businessDetail.phonenumber }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

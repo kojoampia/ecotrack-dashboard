@@ -1,0 +1,19 @@
+<div class="w-100 ml-auto mr-auto">
+    <div class="jumbotron info-theme">
+        <h1 class="display-4" *ngIf="info.title">{{info.title}}</h1>
+        <p class="lead" *ngIf="info.brief">{{info.brief}}</p>
+        <div class="text-right">
+            <button class="btn btn-primary btn-md" (click)="toggleShowMore()" *ngIf="!showMore" >
+                <span>
+                    <fa-icon icon="eye"></fa-icon>&nbsp;<span>Learn more...</span>
+                </span>
+            </button>
+            <button class="btn btn-primary btn-md" (click)="toggleShowMore()" *ngIf="showMore" >
+                <fa-icon icon="ban"></fa-icon>&nbsp;<span class="d-none d-md-inline">Hide</span>
+            </button>
+        </div>
+    </div>
+    <div class="jumbotron info-theme ml-auto mr-auto text-left" *ngIf="showMore">
+        <div [innerHTML]="info.content" *ngIf="info.content"></div>
+    </div>
+</div>

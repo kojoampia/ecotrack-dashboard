@@ -1,0 +1,19 @@
+name: eco-admin-dashboard
+services:
+  eco-admin-dashboard:
+    image: eco-admin-dashboard
+    container_name: eco-admin-dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    volumes:
+      - './eco-admin-dashboard:/usr/src/app'
+    ports:
+      - 127.0.0.1:4200:80
+    networks:
+      - jacnet
+
+networks:
+  jacnet:
+    external: true
+    name: jacnet

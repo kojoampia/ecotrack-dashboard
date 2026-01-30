@@ -1,0 +1,19 @@
+name: eco-admin-dashboard
+services:
+  eco-admin-dashboard:
+    image: eco-admin-dashboard
+    container_name: eco-admin-dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - './eco-admin-dashboard:/usr/src/app'
+    ports:
+      - 127.0.0.1:4300:80
+    networks:
+      - devnet
+
+networks:
+  devnet:
+    external: true
+    name: devnet

@@ -1,0 +1,57 @@
+<mat-card>
+    <mat-card-header>
+        <h2 jhiTranslate="settings.account.main">Edit Account</h2>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="accountForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>{{'settings.form.email' | translate}}</mat-label>
+                        <input matInput [placeholder]="'settings.form.email' | translate"
+                               formControlName="email"/>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>{{'settings.form.firstname' | translate}}</mat-label>
+                        <input matInput [placeholder]="'settings.form.firstname.placeholder' | translate"
+                               formControlName="firstName"/>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>{{'settings.form.lastname' | translate}}</mat-label>
+                        <input matInput [placeholder]="'settings.form.lastname.placeholder' | translate"
+                               formControlName="lastName"/>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>{{'settings.form.profiles' | translate}}</mat-label>
+                        <input matInput [placeholder]="'settings.form.profiles' | translate"
+                               formControlName="authorities"/>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>{{'settings.form.language' | translate}}</mat-label>
+                        <mat-select [placeholder]="'settings.form.language' | translate"
+                                    formControlName="langKey">
+                            <mat-option *ngFor="let language of languages" [value]="language">{{language}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <button mat-raised-button routerLink="/" type="button">
+            {{'shared.button.cancel' | translate}}
+        </button>
+        <button type="button" mat-raised-button (click)="updateAccount()" color="primary">
+            {{'shared.button.submit' | translate}}
+        </button>
+    </mat-card-actions>
+</mat-card>
+

@@ -1,5 +1,0 @@
-id,company_name,contact_email,industry,tier,tenant_id
-1,EuroPower Grid,billing@europower.eu,Utilities,1,tenant_steel_001
-2,Global Steel Scraps,logistics@globalsteel.com,Raw Materials,2,tenant_steel_001
-3,EcoTrucking Solutions,ops@ecotruck.com,Logistics,1,tenant_green_002
-4,BioPolymer Co,sales@biopolymer.io,Chemicals,2,tenant_green_002
