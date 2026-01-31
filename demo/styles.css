@@ -1,0 +1,150 @@
+:host {
+  display: block;
+  --mdc-typography-font-family: 'Inter', sans-serif;
+}
+
+.m3-theme {
+  --primary: #10b981;
+  --on-primary: #022c22;
+  --primary-container: #064e3b;
+  --on-primary-container: #a7f3d0;
+  --secondary: #fbbf24;
+  --on-secondary: #451a03;
+  --secondary-container: #78350f;
+  --on-secondary-container: #fef3c7;
+  --tertiary: #fbbf24;
+  --on-tertiary: #451a03;
+  --tertiary-container: #451a03;
+  --on-tertiary-container: #fef3c7;
+  --error: #f2b8b5;
+  --on-error: #601410;
+  --surface: #0a0e0a;
+  --on-surface: #e1e3df;
+  --on-surface-variant: #94a3b8;
+  --surface-container-low: #131b13;
+  --surface-container: #1b241b;
+  --surface-container-high: #242d24;
+  --surface-container-highest: #2d362d;
+  --outline: #6b7280;
+  --outline-variant: #374151;
+}
+
+.m3-glass {
+  background: rgba(30, 40, 30, 0.4) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(16, 185, 129, 0.1) !important;
+}
+
+.m3-glass-panel {
+  background: rgba(45, 54, 45, 0.2);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+.m3-glass-header {
+  background: rgba(10, 14, 10, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.m3-nav-item {
+  color: var(--on-surface-variant);
+  margin: 0 4px;
+}
+
+.m3-nav-active {
+  background: var(--primary-container) !important;
+  color: var(--on-primary-container) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.m3-select-compact {
+  width: 240px;
+}
+
+::ng-deep .m3-select-compact .mat-mdc-form-field-flex {
+  background: var(--surface-container-highest) !important;
+  border-radius: 12px !important;
+  padding: 0 16px !important;
+}
+
+.m3-table {
+  background: transparent !important;
+}
+
+::ng-deep .mat-mdc-header-row {
+  height: 72px !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+::ng-deep .mat-mdc-row {
+  height: 96px !important;
+  border-bottom: 1px solid var(--outline-variant) !important;
+}
+
+.m3-ai-output ::ng-deep li {
+  list-style: none;
+  padding-left: 36px;
+  position: relative;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.m3-ai-output ::ng-deep li::before {
+  content: 'auto_awesome';
+  font-family: 'Material Icons';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: var(--primary);
+  font-size: 20px;
+}
+
+.m3-chat-field ::ng-deep .mat-mdc-form-field-flex {
+  border-radius: 24px !important;
+  background: var(--surface-container-highest) !important;
+}
+
+.animate-m3 {
+  animation: m3In 0.8s cubic-bezier(0.1, 1, 0.1, 1);
+}
+
+@keyframes m3In {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.scroll-custom::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb {
+  background: var(--primary-container);
+  border-radius: 10px;
+}
+
+.chart-container {
+  position: relative;
+  height: 320px;
+  width: 100%;
+}
+
+.m3-rounded-action {
+  border-radius: 16px !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+}
+
+.m3-rounded-btn-outline {
+  border-radius: 100px !important;
+  font-weight: 700 !important;
+  color: var(--primary) !important;
+  border-color: var(--outline-variant) !important;
+}
