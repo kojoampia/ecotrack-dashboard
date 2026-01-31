@@ -1,13 +1,13 @@
-name: eco-admin-dashboard
+name: eco-ecotrack-dashboard
 services:
-  eco-admin-dashboard:
-    image: eco-admin-dashboard
-    container_name: eco-admin-dashboard
+  eco-ecotrack-dashboard:
+    image: eco-ecotrack-dashboard
+    container_name: eco-ecotrack-dashboard
     build:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - './eco-admin-dashboard:/usr/src/app'
+      - './eco-ecotrack-dashboard:/usr/src/app'
     ports:
       - 127.0.0.1:4300:80
     networks:
